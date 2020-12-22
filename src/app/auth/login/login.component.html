@@ -1,0 +1,16 @@
+<div class="login">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <img src="assets/img/goplaces-logo.svg" class="login__logo">
+  <form (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading" class="login__form">
+    <mat-form-field class="login__form-field">
+      <input matInput name="email" ngModel #emailInput="ngModel" type="email" placeholder="Adresse e-mail" required email class="login__input">
+      <mat-error *ngIf="emailInput.invalid">Veuillez entrer une adresse e-mail valide.</mat-error>
+    </mat-form-field>
+    <mat-form-field class="login__form-field">
+      <input matInput name="password" ngModel #passwordInput="ngModel" type="password" placeholder="Mot de passe" required class="login__input">
+      <mat-error *ngIf="passwordInput.invalid">Veuillez entrer un mot de passe valide.</mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="accent" type="submit" class="login__submit-btn">C'est parti !</button>
+  </form>
+  <p class="login__register-text">Pas encore inscrit ? <a routerLink="/signup">Inscris-toi ici !</a></p>
+</div>
