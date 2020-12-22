@@ -16,15 +16,21 @@ router.post('/signup', (req, res, next) => {
         .then(result => {
           res.status(201).json({
             message: 'User created!',
-            result: result
+            result
           });
         })
-        .catch(err => {
-          res.status(500).json({
-            error: err
+        .catch(error => {
+          res.status(422).json({
+            error
           });
         });
     });
 });
+
+// router.get('/toto', (req, res, next) => {
+//   res.json({
+//     toto: 'tata'
+//   })
+// })
 
 module.exports = router;
