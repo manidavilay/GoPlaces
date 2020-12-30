@@ -1,7 +1,6 @@
 <div class="login">
-  <mat-spinner *ngIf="isLoading"></mat-spinner>
   <img src="assets/img/goplaces-logo.svg" class="login__logo">
-  <form (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading" class="login__form">
+  <form (submit)="onLogin(loginForm)" #loginForm="ngForm" class="login__form">
     <mat-form-field class="login__form-field">
       <input matInput name="email" ngModel #emailInput="ngModel" type="email" placeholder="Adresse e-mail" required email class="login__input">
       <mat-error *ngIf="emailInput.invalid">Veuillez entrer une adresse e-mail valide.</mat-error>

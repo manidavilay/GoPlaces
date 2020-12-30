@@ -40,6 +40,9 @@
   }
 
   &__submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 230px;
     height: 55px;
     margin: 40px auto 0;
