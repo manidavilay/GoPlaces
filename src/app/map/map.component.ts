@@ -16,16 +16,17 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngAfterViewInit() {
     const myAPIKey = '9af511211df4449d9de273288b3e8ac8';
     const mapStyle = 'https://maps.geoapify.com/v1/styles/klokantech-basic/style.json';
 
     const initialState =  {
-      lng: 11,
-      lat: 49,
-      zoom: 4
+      lng: 2.3488,
+      lat: 48.8534,
+      zoom: 14
     }
 
     const map = new L.Map(this.mapContainer.nativeElement).setView(
@@ -43,5 +44,11 @@ export class MapComponent implements OnInit, AfterViewInit {
       style: `${mapStyle}?apiKey=${myAPIKey}`,
       accessToken: 'pk.eyJ1IjoibWFuaWRhIiwiYSI6ImNramxzaXF0NTNmNHQzMXNjeTRvdHByY2IifQ.7yoL_dmU_SiIlJ3KjTCf2g'
     }).addTo(map);
+
+    const myIcon = L.icon({
+      iconUrl: '../../assets/img/marker-icon.png',
+      iconSize: [38, 41]
+    });
+    L.marker([48.8534, 2.3488], {icon: myIcon}).bindPopup('Ceci est un marqueur').addTo(map).openPopup();
   }
 }

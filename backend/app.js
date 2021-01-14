@@ -12,13 +12,13 @@ app.use(cors());
 
 mongoose
   .connect(
-    'mongodb+srv://many:5hi7jeTAY77DBk9M@cluster0.hplm9.mongodb.net/app-perso?retryWrites=true&w=majority'
+    'mongodb+srv://many:5hi7jeTAY77DBk9M@cluster0.hplm9.mongodb.net/app-perso?retryWrites=true&w=majority', { useNewUrlParser: true, useUnifiedTopology: true }
   )
   .then(() => {
     console.log('Connected to database !');
   })
   .catch(() => {
-    console/log('Connection failed');
+    console.log('Connection failed');
   });
 
 app.use(bodyParser.json());
