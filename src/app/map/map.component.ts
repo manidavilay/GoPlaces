@@ -1,6 +1,9 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 import 'mapbox-gl-leaflet';
+
+import { MapService } from './map.service';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +17,10 @@ export class MapComponent implements OnInit, AfterViewInit {
   @ViewChild('map')
   private mapContainer: ElementRef<HTMLElement>;
 
-  constructor() {}
+  constructor(public mapService: MapService, private http: HttpClient) { }
 
   ngOnInit() {
+    this.mapService.getLocationsInformations();
   }
 
   ngAfterViewInit() {
