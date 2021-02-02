@@ -42,6 +42,7 @@ import { MapInterceptor } from './map/map-interceptor';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: MapInterceptor, multi: true}
   ],
+
   bootstrap: [AppComponent]
 })
 export class AppModule { }

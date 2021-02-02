@@ -9,7 +9,7 @@ import { MapService } from "./map.service";
 export class MapInterceptor implements HttpInterceptor {
   constructor(private mapService: MapService) {}
   intercept(httpRequest: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const API_KEY = '87ae20e4-b136-30cc-b421-c949c6da0825';
+    const API_KEY = '7887b45f-92e7-331a-b897-c366087c1e9b';
     return next.handle(httpRequest.clone({
       setHeaders: {
         Authorization: `Bearer ${API_KEY}`
