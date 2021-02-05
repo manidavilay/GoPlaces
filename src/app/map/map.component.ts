@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angula
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 
-import { MapService } from './map.service';
+// import { MapService } from './map.service';
 import { ThrowStmt } from '@angular/compiler';
 
 @Component({
@@ -17,11 +17,11 @@ export class MapComponent implements OnInit, AfterViewInit {
   @ViewChild('map')
   private mapContainer: ElementRef<HTMLElement>;
 
-  constructor(public mapService: MapService, private http: HttpClient) {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit() {
-    this.mapService.getLocationsInformations();
+    // this.mapService.getLocationsInformations();
   }
 
   ngAfterViewInit() {
@@ -49,6 +49,9 @@ export class MapComponent implements OnInit, AfterViewInit {
       iconSize: [38, 41]
     });
 
-    L.marker([48.8534, 2.3488], {icon: myIcon}).bindPopup('Ceci est un marqueur').addTo(map).openPopup();
+    const markerGroup = L.layerGroup()
+    markerGroup.addTo(map)
+
+    L.marker([48.8534, 2.3488], {icon: myIcon}).bindPopup('Ceci est un marqueur').addTo(markerGroup).openPopup();
   }
 }

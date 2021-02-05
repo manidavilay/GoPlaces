@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 
 const addressSchema = mongoose.Schema({
-  addressName: String,
-  addressLat: Number,
-  addressLng: Number
+  name: String,
+  location: {
+    type: { type: String },
+    coordinates: Array
+  },
+  label: String,
+  postalCode: Number
 });
 
 module.exports = mongoose.model('Address', addressSchema);
