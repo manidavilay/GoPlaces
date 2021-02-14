@@ -4,6 +4,7 @@ import * as L from 'leaflet';
 
 // import { MapService } from './map.service';
 import { ThrowStmt } from '@angular/compiler';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -12,46 +13,68 @@ import { ThrowStmt } from '@angular/compiler';
 })
 export class MapComponent implements OnInit, AfterViewInit {
 
+  // Declare variables related to map
   private map: L.Map;
-
-  @ViewChild('map')
-  private mapContainer: ElementRef<HTMLElement>;
-
-  constructor(private http: HttpClient) {
+  private osmUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png';
+  private osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+  private osmSub = 'abcd';
+  private osm = new L.TileLayer(this.osmUrl, {
+    attribution: this.osmAttrib,
+    subdomains: this.osmSub
+  });
+  private initialState = {
+    lng: 2.3488,
+    lat: 48.8534,
+    zoom: 14
   }
 
+  // Declare variables related to markers on map
+  private myIcon = L.icon({
+    iconUrl: '../../assets/img/marker-icon.png',
+    iconSize: [38, 41]
+  });
+  private markerGroup = L.layerGroup()
+
+  // Declare variables related to map container
+  @ViewChild('map')
+  private mapContainer: ElementRef < HTMLElement > ;
+
+  // Declare variables related to locations API stored in database
+  private addressesUrl = 'http://localhost:3000/api/address/getall';
+
+  address: any;
+  addressesArray = [];
+  constructor(private http: HttpClient) {}
+
   ngOnInit() {
-    // this.mapService.getLocationsInformations();
+    this.displayMarkers()
   }
 
   ngAfterViewInit() {
     this.displayMap();
   }
 
+  // Display map function
   displayMap() {
-    const osmUrl = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png';
-    const osmAttrib = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
-    const osmSub = 'abcd';
-    const osm = new L.TileLayer(osmUrl, {attribution: osmAttrib, subdomains: osmSub});
-    const initialState =  {
-      lng: 2.3488,
-      lat: 48.8534,
-      zoom: 14
-    }
-
-    const map = new L.Map(this.mapContainer.nativeElement).addLayer(osm).setView(
-      [initialState.lat, initialState.lng],
-      initialState.zoom
+    this.map = new L.Map(this.mapContainer.nativeElement).addLayer(this.osm).setView(
+      [this.initialState.lat, this.initialState.lng],
+      this.initialState.zoom
     )
+  }
 
-    const myIcon = L.icon({
-      iconUrl: '../../assets/img/marker-icon.png',
-      iconSize: [38, 41]
-    });
-
-    const markerGroup = L.layerGroup()
-    markerGroup.addTo(map)
-
-    L.marker([48.8534, 2.3488], {icon: myIcon}).bindPopup('Ceci est un marqueur').addTo(markerGroup).openPopup();
+  // Fetch addresses in database and add markers on map function
+  displayMarkers() {
+    this.http.get(this.addressesUrl)
+    .subscribe(locations => {
+      this.address = locations;
+      this.addressesArray = this.address.list;
+      for (let item in locations) {
+        const coordinates = locations[item].location.coordinates
+        L.marker([coordinates[1], coordinates[0]], {
+          icon: this.myIcon
+        }).bindPopup('Ceci est un marqueur').addTo(this.markerGroup).openPopup();
+        this.markerGroup.addTo(this.map)
+      }
+    })
   }
 }
