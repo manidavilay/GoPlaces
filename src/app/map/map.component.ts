@@ -29,10 +29,14 @@ export class MapComponent implements OnInit, AfterViewInit {
   }
 
   // Declare variables related to markers on map
-  private myIcon = L.icon({
+  private locationMarker = L.icon({
     iconUrl: '../../assets/img/marker-icon.png',
     iconSize: [38, 41]
   });
+  private userMarker = L.icon({
+    iconUrl: '../../assets/img/user-marker.png',
+    iconSize: [38, 41]
+  })
   private markerGroup = L.layerGroup()
 
   // Declare variables related to map container
@@ -48,6 +52,7 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.displayMarkers()
+    this.getUserLocation()
   }
 
   ngAfterViewInit() {
@@ -70,11 +75,33 @@ export class MapComponent implements OnInit, AfterViewInit {
       this.addressesArray = this.address.list;
       for (let item in locations) {
         const coordinates = locations[item].location.coordinates
-        L.marker([coordinates[1], coordinates[0]], {
-          icon: this.myIcon
-        }).bindPopup('Ceci est un marqueur').addTo(this.markerGroup).openPopup();
-        this.markerGroup.addTo(this.map)
+        if (locations[item].name && locations[item].label) {
+          const locationName = locations[item].name
+          const locationAddress = locations[item].label
+          L.marker([coordinates[1], coordinates[0]], {
+            icon: this.locationMarker
+          }).bindPopup(locationName + '<br><br>' + locationAddress).addTo(this.markerGroup).openPopup();
+          this.markerGroup.addTo(this.map)
+        }
       }
     })
+  }
+
+  // Get user's geolocation
+  getUserLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(position => {
+        console.log(position.coords.latitude)
+        console.log(position.coords.longitude)
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        L.marker([lat, lng], {
+          icon: this.userMarker
+        }).bindPopup('User\'s location').addTo(this.markerGroup).openPopup();
+        this.markerGroup.addTo(this.map)
+      });
+    } else {
+      console.log('User\'s location not found')
+    }
   }
 }
