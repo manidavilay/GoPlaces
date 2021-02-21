@@ -3,8 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
 
 // import { MapService } from './map.service';
-import { ThrowStmt } from '@angular/compiler';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +23,8 @@ export class MapComponent implements OnInit, AfterViewInit {
   private initialState = {
     lng: 2.3488,
     lat: 48.8534,
-    zoom: 14
+    zoom: 15,
+    watch: true
   }
 
   // Declare variables related to markers on map
@@ -63,7 +62,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   displayMap() {
     this.map = new L.Map(this.mapContainer.nativeElement).addLayer(this.osm).setView(
       [this.initialState.lat, this.initialState.lng],
-      this.initialState.zoom
+      this.initialState.zoom,
     )
   }
 
@@ -89,17 +88,37 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   // Get user's geolocation
   getUserLocation() {
+
+    // getCurrentPosition method
+    // if (navigator.geolocation) {
+    //   navigator.geolocation.getCurrentPosition(position => {
+    //     const lat = position.coords.latitude;
+    //     const lng = position.coords.longitude;
+    //     L.marker([lat, lng], {
+    //       icon: this.userMarker
+    //     }).bindPopup('Votre position actuelle').addTo(this.markerGroup).openPopup();
+    //     this.markerGroup.addTo(this.map)
+    //   });
+    // } else {
+    //   console.log('User\'s location not found')
+    // }
+
+    // watchPosition method
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(position => {
-        console.log(position.coords.latitude)
-        console.log(position.coords.longitude)
+      navigator.geolocation.watchPosition(position => {
+        console.log(position)
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         L.marker([lat, lng], {
           icon: this.userMarker
-        }).bindPopup('User\'s location').addTo(this.markerGroup).openPopup();
+        }).bindPopup('Votre position actuelle').addTo(this.markerGroup).openPopup();
         this.markerGroup.addTo(this.map)
-      });
+        L.circle([lat, lng], {
+          radius: 100,
+          color: 'transparent',
+          weight: 1,
+        }).addTo(this.map)
+      })
     } else {
       console.log('User\'s location not found')
     }
