@@ -9,9 +9,8 @@ import { MapComponent } from './map/map.component';
 const routes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'map', component: MapComponent}
+  { path: 'map', component: MapComponent }
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

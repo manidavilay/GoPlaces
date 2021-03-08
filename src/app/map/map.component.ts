@@ -1,11 +1,17 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import * as L from 'leaflet';
+// import * as L from 'leaflet';
+import { latLng, tileLayer, Icon, icon, Marker } from "leaflet";
+import 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
+import 'leaflet-routing-machine';
+declare let L;
 
 // import { MapService } from './map.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'app-wrapper',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
@@ -19,23 +25,26 @@ export class MapComponent implements OnInit, AfterViewInit {
   private osm = new L.TileLayer(this.osmUrl, {
     attribution: this.osmAttrib,
     subdomains: this.osmSub
-  });
+  })
   private initialState = {
     lng: 2.3488,
     lat: 48.8534,
     zoom: 15,
-    watch: true
+    watch: true,
+    drawControl: true
   }
 
   // Declare variables related to markers on map
   private locationMarker = L.icon({
     iconUrl: '../../assets/img/marker-icon.png',
     iconSize: [38, 41]
-  });
+  })
+
   private userMarker = L.icon({
     iconUrl: '../../assets/img/user-marker.png',
     iconSize: [38, 41]
   })
+
   private markerGroup = L.layerGroup()
 
   // Declare variables related to map container
@@ -50,12 +59,13 @@ export class MapComponent implements OnInit, AfterViewInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.displayMarkers()
     this.getUserLocation()
   }
 
   ngAfterViewInit() {
-    this.displayMap();
+    this.displayMap()
+    this.displayMarkers()
+    // this.drawPath()
   }
 
   // Display map function
@@ -88,21 +98,6 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   // Get user's geolocation
   getUserLocation() {
-
-    // getCurrentPosition method
-    // if (navigator.geolocation) {
-    //   navigator.geolocation.getCurrentPosition(position => {
-    //     const lat = position.coords.latitude;
-    //     const lng = position.coords.longitude;
-    //     L.marker([lat, lng], {
-    //       icon: this.userMarker
-    //     }).bindPopup('Votre position actuelle').addTo(this.markerGroup).openPopup();
-    //     this.markerGroup.addTo(this.map)
-    //   });
-    // } else {
-    //   console.log('User\'s location not found')
-    // }
-
     // watchPosition method
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(position => {
@@ -123,4 +118,14 @@ export class MapComponent implements OnInit, AfterViewInit {
       console.log('User\'s location not found')
     }
   }
+
+  // drawPath() {
+  //   L.Routing.control({
+  //     waypoints: [
+  //       L.latLng(48.8514206, 2.3820639999999997),
+  //       L.latLng(48.86744600000000105, 2.3762449999999999406)
+  //     ],
+  //     routeWhileDragging: true
+  //   }).addTo(this.map);
+  // }
 }

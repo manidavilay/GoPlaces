@@ -15,6 +15,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { MapComponent } from './map/map.component';
+import { NavigationComponent } from './navigation/navigation.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
 // import { MapInterceptor } from './map/map-interceptor';
 
@@ -23,7 +24,8 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     AppComponent,
     LoginComponent,
     SignupComponent,
-    MapComponent
+    MapComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
