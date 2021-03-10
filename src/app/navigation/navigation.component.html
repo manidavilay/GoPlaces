@@ -1,8 +1,16 @@
 <div class="navigation" *ngIf="showHead">
   <div class="navigation__menu">
-    <img src="assets/img/placeholder.svg" alt="">
-    <img src="assets/img/qr-code.svg" alt="">
-    <img src="assets/img/search.svg" alt="">
-    <img src="assets/img/user.svg" alt="">
+    <button (click)="hideAccount()">
+      <img class="map-icon" src="assets/img/placeholder.svg" alt="">
+    </button>
+    <button>
+      <img class="qr-code-icon" src="assets/img/qr-code.svg" alt="">
+    </button>
+    <button>
+      <img class="search-icon" src="assets/img/search.svg" alt="">
+    </button>
+    <button (click)="showAccount()">
+      <img class="account-icon" src="assets/img/user.svg" alt="">
+    </button>
   </div>
 </div>

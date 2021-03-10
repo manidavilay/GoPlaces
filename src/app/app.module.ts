@@ -16,7 +16,9 @@ import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { MapComponent } from './map/map.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { AccountComponent } from './account/account.component';
 import { AuthInterceptor } from './auth/auth-interceptor';
+import { NavigationService } from './navigation/navigation.service';
 // import { MapInterceptor } from './map/map-interceptor';
 
 @NgModule({
@@ -25,7 +27,8 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     LoginComponent,
     SignupComponent,
     MapComponent,
-    NavigationComponent
+    NavigationComponent,
+    AccountComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ import { AuthInterceptor } from './auth/auth-interceptor';
     MatFormFieldModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    NavigationService
     // { provide: HTTP_INTERCEPTORS, useClass: MapInterceptor, multi: true}
   ],
 
