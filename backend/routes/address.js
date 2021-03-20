@@ -7,7 +7,7 @@ const Address = require('../models/address');
 
 const router = express.Router();
 
-const url = "mongodb://localhost:4200/";
+const url = "mongodb://127.0.0.1:27017/app-perso";
 
 // Get all addresses stored in database
 router.get('/getall', (req, res) => {
@@ -88,6 +88,7 @@ const getGeo = query => {
   })
 }
 
+// Add localisation in database at each request
 const createNewAddress = address => {
   console.log('createNewAddress')
   return new Promise((resolve, reject) => {
@@ -105,8 +106,8 @@ const createNewAddress = address => {
 
 router.get('/:cityCode/:ape', (req, res) => {
   MongoClient.connect(url, function (err, db) {
-    if (err) throw err;
-    var dbo = db.db('app-perso');
+    if (err) throw err
+    var dbo = db.db('app-perso')
     dbo.collection('addresses').findOne({
         name: item.uniteLegale.denominationUniteLegale,
         location: address.features[0].geometry,
@@ -114,12 +115,29 @@ router.get('/:cityCode/:ape', (req, res) => {
         postalCode: req.params.cityCode,
       },
       function (err, result) {
-        if (err) throw err;
-        res.json(result);
-        db.close();
-      });
-    console.log(err);
-  });
-});
+        if (err) throw err
+        res.json(result)
+        db.close()
+      })
+    console.log(err)
+  })
+})
+
+// Fetch markers only in map view
+router.post('/geo', (req, res) => {
+  let fetchOption = { location: { $geoWithin: { $polygon: req.body.polygon } } }
+  MongoClient.connect(url, function (err, db) {
+    if (err) throw err
+    var dbo = db.db('app-perso')
+    dbo.collection('addresses').findOne(
+      fetchOption,
+      function (err, result) {
+        if (err) throw err
+        res.json(result)
+        db.close()
+      })
+    console.log(err)
+  })
+})
 
 module.exports = router;

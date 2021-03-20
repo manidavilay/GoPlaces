@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { iif, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
 
@@ -26,20 +26,25 @@ export class AuthService {
     return this.authStatusListener.asObservable();
   }
 
-  createUser(email: string, password: string) {
-    const authData: AuthData = {email, password};
+  createUser(lastname: string, firstname: string, email: string, password: string) {
+    const authData: AuthData = {lastname, firstname, email, password};
     this.http.post('http://localhost:3000/api/user/signup', authData)
       .subscribe(response => {
         console.log(response);
+        if (response) {
+          this.router.navigate(['/'])
+        }
       })
   }
 
-  login(email: string, password: string) {
-    const authData: AuthData = {email, password};
+  login( lastname: string, firstname: string, email: string, password: string) {
+    const authData: AuthData = {lastname, firstname, email, password};
     this.http.post<{token: string, expiresIn: number}>('http://localhost:3000/api/user/login', authData)
     .subscribe(response => {
+      console.log(response)
       const token = response.token;
       this.token = token;
+      console.log(token)
       if (token) {
         const expiresInDuration = response.expiresIn;
         this.setAuthTimer(expiresInDuration);

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
+
 import { NavigationService } from '../navigation/navigation.service';
 @Component({
   selector: 'app-navigation',
@@ -8,15 +9,15 @@ import { NavigationService } from '../navigation/navigation.service';
 })
 
 export class NavigationComponent {
-  public showHead: boolean = false;
+  public showNav: boolean = false;
 
   constructor(private router: Router, private navigationService: NavigationService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {
-          this.showHead = false
+          this.showNav = false
         } else {
-          this.showHead = true
+          this.showNav = true
         }
       }
     })

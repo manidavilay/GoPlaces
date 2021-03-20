@@ -1,3 +1,4 @@
+// Import modules
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
@@ -11,15 +12,24 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 // import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
+// Import components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
 import { MapComponent } from './map/map.component';
 import { NavigationComponent } from './navigation/navigation.component';
+import { HeaderComponent } from './header/header.component';
 import { AccountComponent } from './account/account.component';
+import { ProfileComponent } from './auth/profile/profile.component';
+
+// Import interceptors
 import { AuthInterceptor } from './auth/auth-interceptor';
-import { NavigationService } from './navigation/navigation.service';
 // import { MapInterceptor } from './map/map-interceptor';
+
+// Import services
+// import { MapService } from './map/map.service';
+import { NavigationService } from './navigation/navigation.service';
+import { AccountService } from './account/account.service';
 
 @NgModule({
   declarations: [
@@ -28,7 +38,9 @@ import { NavigationService } from './navigation/navigation.service';
     SignupComponent,
     MapComponent,
     NavigationComponent,
-    AccountComponent
+    HeaderComponent,
+    AccountComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +57,9 @@ import { NavigationService } from './navigation/navigation.service';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    NavigationService
+    // MapService,
+    NavigationService,
+    AccountService
     // { provide: HTTP_INTERCEPTORS, useClass: MapInterceptor, multi: true}
   ],
 

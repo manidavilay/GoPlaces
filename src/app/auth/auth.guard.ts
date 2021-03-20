@@ -6,17 +6,20 @@
 
 // @Injectable()
 // export class AuthGuard implements CanActivate {
-//   constructor(private authService: AuthService, private router: Router) {}
+//   constructor(
+//     private router: Router,
+//     private authService: AuthService
+//   ) {}
 
-//   canActivate(
-//     route: ActivatedRouteSnapshot,
-//     state: RouterStateSnapshot
-//   ): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-//     const isAuth = this.authService.getIsAuth();
-//     if (!isAuth) {
-//       this.router.navigate(['/']);
-//       console.log('Not authenticated');
+//   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+//     const currentUser = this.authService.currentUserValue;
+//     if (currentUser) {
+//       // authorised so return true
+//       return true;
 //     }
-//     return isAuth;
-//   }
+
+//     // not logged in so redirect to login page with the return url
+//     this.router.navigate(['/login'], { queryParams: { returnUrl: state.url }});
+//     return false;
+// }
 // }

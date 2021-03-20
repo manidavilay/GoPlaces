@@ -2,14 +2,14 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <img src="assets/img/goplaces-logo.svg" class="signup__logo">
   <form (submit)="onSignup(signupForm)" #signupForm="ngForm" *ngIf="!isLoading" class="signup__form">
-    <!-- <mat-form-field class="signup__form-field">
-      <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom" required lastname class="signup__input">
-      <mat-error *ngIf="lastnameInput.invalid">Veuillez entrer un nom valide.</mat-error>
+    <mat-form-field class="signup__form-field">
+      <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom" required class="signup__input">
+      <mat-error *ngIf="lastnameInput.invalid">Veuillez entrer un nom.</mat-error>
     </mat-form-field>
     <mat-form-field class="signup__form-field">
-      <input matInput name="firstname" ngModel #firstnameInput="ngModel" type="text" placeholder="Prénom" required firstname class="signup__input">
-      <mat-error *ngIf="firstnameInput.invalid">Veuillez entrer un prénom valide.</mat-error>
-    </mat-form-field> -->
+      <input matInput name="firstname" ngModel #firstnameInput="ngModel" type="text" placeholder="Prénom" required class="signup__input">
+      <mat-error *ngIf="firstnameInput.invalid">Veuillez entrer un prénom.</mat-error>
+    </mat-form-field>
     <mat-form-field class="signup__form-field">
       <input matInput name="email" ngModel #emailInput="ngModel" type="email" placeholder="Adresse e-mail" required email class="signup__input">
       <mat-error *ngIf="emailInput.invalid">Veuillez entrer une adresse e-mail valide.</mat-error>

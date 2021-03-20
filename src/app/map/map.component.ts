@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 // import * as L from 'leaflet';
 import { latLng, tileLayer, Icon, icon, Marker } from "leaflet";
 import 'leaflet';
@@ -15,6 +15,7 @@ declare let L;
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.scss']
 })
+
 export class MapComponent implements OnInit, AfterViewInit {
 
   // Declare variables related to map
@@ -45,14 +46,17 @@ export class MapComponent implements OnInit, AfterViewInit {
     iconSize: [38, 41]
   })
 
-  private markerGroup = L.layerGroup()
+  private markerGroup = L.featureGroup()
 
   // Declare variables related to map container
   @ViewChild('map')
-  private mapContainer: ElementRef < HTMLElement > ;
+  private mapContainer: ElementRef < HTMLElement >
 
-  // Declare variables related to locations API stored in database
+  // Declare variable related to locations API stored in database
   private addressesUrl = 'http://localhost:3000/api/address/getall';
+
+  // Declare variable related to displayed markers on map view
+  private markersGeo = 'http://localhost:3000/api/address/geo';
 
   address: any;
   addressesArray = [];
@@ -65,6 +69,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.displayMap()
     this.displayMarkers()
+    this.getMapBounds()
     // this.drawPath()
   }
 
@@ -98,7 +103,6 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   // Get user's geolocation
   getUserLocation() {
-    // watchPosition method
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(position => {
         console.log(position)
@@ -117,6 +121,38 @@ export class MapComponent implements OnInit, AfterViewInit {
     } else {
       console.log('User\'s location not found')
     }
+  }
+
+  // Get displayed map area on device
+  getMapBounds() {
+    this.map.on('dragend', () => {
+      let width = this.map.getBounds().getEast() - this.map.getBounds().getWest()
+      let height = this.map.getBounds().getNorth() - this.map.getBounds().getSouth()
+      /* console.log(
+        'center:' + this.map.getCenter() +'\n'+
+        'width:' + width +'\n'+
+        'height:' + height +'\n'+
+        'size in pixels:' + this.map.getSize()
+      ) */
+      let mapBounds = this.map.getBounds()
+      const polygon = [
+        [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ],
+        [ mapBounds["_southWest"].lng, mapBounds["_northEast"].lat ],
+        [ mapBounds["_southWest"].lng, mapBounds["_southWest"].lat ],
+        [ mapBounds["_northEast"].lng, mapBounds["_southWest"].lat ]
+      ]
+      this.fetchMarkerGeo(polygon)
+    })
+  }
+
+  fetchMarkerGeo(polygon) {
+    // let myHeader = new HttpHeaders();
+    // myHeader.append('Content-Type', 'application/json');
+    this.http.post(this.markersGeo, {polygon})
+    .subscribe(locations => {
+      console.log(locations)
+    })
+    // return { headers: myHeader, withCredentials: true};
   }
 
   // drawPath() {

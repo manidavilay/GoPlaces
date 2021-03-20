@@ -11,6 +11,8 @@ router.post('/signup', (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
       const user = new User({
+        lastname: req.body.lastname,
+        firstname: req.body.firstname,
         email: req.body.email,
         password: hash
       });
@@ -33,7 +35,7 @@ router.post('/login', (req, res, next) => {
   User.findOne({ email: req.body.email }).then(user => {
     if (!user) {
       return res.status(401).json({
-        message: "Authentification failed !"
+        message: "Authentication failed !"
       });
     }
     return bcrypt.compare(req.body.password, user.password);
@@ -41,12 +43,12 @@ router.post('/login', (req, res, next) => {
   .then(result => {
     if (!result) {
       return res.status(401).json({
-        message: "Authentification failed !"
+        message: "Authentication failed !"
       });
     }
     const token = jwt.sign(
       { email: user.email, userId: user._id },
-      'secret_this_should_be_longer',
+      'ZErdvygygyf34gujijojnbyfy12AEfyj',
       { expiresIn: '1h' }
     );
     res.status(200).json({
@@ -57,9 +59,22 @@ router.post('/login', (req, res, next) => {
   })
   .catch(err => {
     return res.status(401).json({
-      message: "Authentification failed !"
+      message: "Authentication failed !"
     });
   });
 });
+
+// router.post('/profile', (req, res, next) => {
+//   const profile = new Profile({
+//     lastname: req.body.lastname,
+//     firstname: req.body.firstname
+//   })
+//   profile.save().then(createdProfile => {
+//     res.status(201).json({
+//       message: 'Informations added successfully',
+//       profileId: createdProfile._id
+//     })
+//   })
+// });
 
 module.exports = router;

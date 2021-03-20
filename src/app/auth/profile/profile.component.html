@@ -1,0 +1,29 @@
+<div class="profile" *ngIf="showProfile hideProfile">
+  <div class="profile__body">
+    <button (click)="returnToAccount()" class="return-btn">
+      <img src="assets/img/go-back.png" alt="">
+    </button>
+    <button class="edit-btn">
+      <img src="assets/img/edit.png">
+    </button>
+    <form>
+      <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+        <img [src]="imagePreview" [alt]="form.value.title">
+      </div>
+      <div class="file-uploader">
+        <button (click)="filePicker.click()" mat-stroked-button type="button">Ajouter/modifier une photo de profil</button>
+        <input type="file" #filePicker (change)="onImagePicked($event)" />
+      </div>
+      <mat-form-field class="input-wrapper">
+        <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom">
+      </mat-form-field>
+      <mat-form-field class="input-wrapper">
+        <input matInput name="firstname" ngModel #firstnameInput="ngModel" type="text" placeholder="Prénom">
+      </mat-form-field>
+      <!-- <mat-form-field class="input-wrapper">
+        <input matInput name="email" ngModel #emailInput="ngModel" type="email" placeholder="E-mail">
+      </mat-form-field> -->
+      <button mat-raised-button color="accent" type="submit" class="save-infos-btn">Sauvegarder</button>
+    </form>
+  </div>
+</div>

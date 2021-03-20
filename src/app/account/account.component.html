@@ -1,13 +1,10 @@
-<div class="account" *ngIf="!isShow !isHidden">
-  <div class="account__head">
-    <img src="assets/img/goplaces-logo.svg" alt="">
-  </div>
+<div class="account" *ngIf="showAccount hideAccount">
   <div class="account__body">
     <div class="user-section">
-      <div class="user-section__items user-section__items--even items__profile">
+      <button (click)="showProfile()" class="user-section__items user-section__items--even items__profile">
         <img src="assets/img/profile.svg" alt="">
         <p>Profil</p>
-      </div>
+      </button>
       <div class="user-section__items user-section__items--odd items__places">
         <img src="assets/img/places.svg" alt="">
         <p>Lieux visités</p>
