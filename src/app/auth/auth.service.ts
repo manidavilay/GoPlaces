@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
 
@@ -12,7 +13,10 @@ export class AuthService {
   private tokenTimer: any;
   private authStatusListener = new Subject<boolean>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   getToken() {
     return this.token;
@@ -37,7 +41,7 @@ export class AuthService {
       })
   }
 
-  login( lastname: string, firstname: string, email: string, password: string) {
+  login(lastname: string, firstname: string, email: string, password: string) {
     const authData: AuthData = {lastname, firstname, email, password};
     this.http.post<{token: string, expiresIn: number}>('http://localhost:3000/api/user/login', authData)
     .subscribe(response => {
@@ -73,6 +77,13 @@ export class AuthService {
       this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
     }
+  }
+
+  fetchUsers() {
+    this.http.get('http://localhost:3000/api/user/signup')
+    .subscribe(response => {
+      console.log(response)
+    })
   }
 
   logout() {

@@ -2,7 +2,10 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, NavigationStart } from '@angular/router';
 import { mimeType } from './mime-type.validator'
+import { ActivatedRoute } from "@angular/router";
+import {HttpClient} from '@angular/common/http';
 
+import { AuthService } from '../auth.service'
 import { AccountService } from '../../account/account.service';
 
 @Component({
@@ -17,7 +20,13 @@ export class ProfileComponent {
   form: FormGroup;
   imagePreview: any;
 
-  constructor(private router: Router, private accountService: AccountService) {
+  constructor(
+    private router: Router,
+    public route: ActivatedRoute,
+    private accountService: AccountService,
+    private authService: AuthService,
+    private http: HttpClient
+    ) {
     this.accountService.getMessage().subscribe(message => {
       this.showProfile = !this.showProfile
       this.hideProfile = !this.hideProfile
@@ -34,12 +43,13 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
-   this.form =  new FormGroup({
+   this.form = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType]
       })
    })
+   this.fetchUsers()
   }
 
   onImagePicked(event: Event) {
@@ -55,5 +65,9 @@ export class ProfileComponent {
 
   returnToAccount() {
     this.showProfile = false
+  }
+
+  fetchUsers() {
+    this.authService.fetchUsers()
   }
 }

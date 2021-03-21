@@ -112,11 +112,6 @@ export class MapComponent implements OnInit, AfterViewInit {
           icon: this.userMarker
         }).bindPopup('Votre position actuelle').addTo(this.markerGroup).openPopup();
         this.markerGroup.addTo(this.map)
-        L.circle([lat, lng], {
-          radius: 100,
-          color: 'transparent',
-          weight: 1,
-        }).addTo(this.map)
       })
     } else {
       console.log('User\'s location not found')
