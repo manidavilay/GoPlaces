@@ -14,6 +14,11 @@
         <button (click)="filePicker.click()" mat-stroked-button type="button">Ajouter/modifier une photo de profil</button>
         <input type="file" #filePicker (change)="onImagePicked($event)" />
       </div>
+      <div *ngFor="let user of users">
+        <div>{{ user.lastname }}</div>
+        <div>{{ user.firstname }}</div>
+        <div>{{ user.email }}</div>
+      </div>
       <!-- <mat-form-field class="input-wrapper">
         <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom">
       </mat-form-field>

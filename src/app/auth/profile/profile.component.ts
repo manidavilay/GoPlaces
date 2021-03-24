@@ -3,7 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router, NavigationStart } from '@angular/router';
 import { mimeType } from './mime-type.validator'
 import { ActivatedRoute } from "@angular/router";
-import {HttpClient} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from '../auth.service'
 import { AccountService } from '../../account/account.service';
@@ -19,6 +19,7 @@ export class ProfileComponent {
   hideProfile: boolean = true;
   form: FormGroup;
   imagePreview: any;
+  users: any = [];
 
   constructor(
     private router: Router,
@@ -27,6 +28,7 @@ export class ProfileComponent {
     private authService: AuthService,
     private http: HttpClient
     ) {
+    // Show / Hide profile on click
     this.accountService.getMessage().subscribe(message => {
       this.showProfile = !this.showProfile
       this.hideProfile = !this.hideProfile
@@ -52,6 +54,7 @@ export class ProfileComponent {
    this.fetchUsers()
   }
 
+  // Image uploader
   onImagePicked(event: Event) {
     const file = (event.target as HTMLInputElement).files[0]
     this.form.patchValue({image: file})
@@ -63,11 +66,17 @@ export class ProfileComponent {
     reader.readAsDataURL(file)
   }
 
+  // Back to account on click
   returnToAccount() {
     this.showProfile = false
   }
 
+  // Fetch user's informations
   fetchUsers() {
-    this.authService.fetchUsers()
+    this.http.get('http://localhost:3000/api/user/signup')
+    .subscribe(response => {
+      this.users = response
+      this.users = this.users.posts
+    })
   }
 }

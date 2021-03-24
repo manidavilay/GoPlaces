@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { AuthData } from './auth-data.model';
 
@@ -77,13 +78,6 @@ export class AuthService {
       this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
     }
-  }
-
-  fetchUsers() {
-    this.http.get('http://localhost:3000/api/user/signup')
-    .subscribe(response => {
-      console.log(response)
-    })
   }
 
   logout() {
