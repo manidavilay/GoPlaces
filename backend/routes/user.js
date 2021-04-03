@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 const user = require('../models/user');
+const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
@@ -76,12 +77,44 @@ router.get('/signup', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   User.findById(req.params.id).then(user => {
     if (user) {
-      res.status(200).json(user);
+      res.status(200).json({
+        message: "User fetched successfully!",
+        posts: user
+      });
     } else {
       res.status(400).json({
-        message: 'User not found !'
+        message: 'User not found!'
       });
     }
+  })
+})
+
+router.put('/:id', (req, res, next) => {
+  const user = new User({
+    _id: req.body.id,
+    lastname: req.body.lastname,
+    firstname: req.body.firstname
+  })
+  user.updateOne({ _id: req.params.id }, user).then(result => {
+    console.log(result)
+    if (result.nModified > 0) {
+      res.status(200).json({
+        message: 'Update successful!'
+      })
+    } else {
+      res.status(401).json({
+        message: 'Update failed!'
+      })
+    }
+  });
+})
+
+router.delete('/:id', (req, res, next) => {
+  User.deleteOne({ _id: req.params.id }).then(result => {
+    console.log(result)
+    res.status(200).json({
+      message: 'User deleted!'
+    })
   })
 })
 

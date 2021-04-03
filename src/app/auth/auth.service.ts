@@ -80,6 +80,14 @@ export class AuthService {
     }
   }
 
+  // fetchUser(id) {
+  //   return this.http.get('http://localhost:3000/api/user/' + id).pipe(map(data => {
+  //     return data.json()
+  //   })).subscribe(result => {
+  //     console.log(result)
+  //   })
+  // }
+
   logout() {
     this.token = null;
     this.isAuthenticated = false;

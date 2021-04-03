@@ -9,6 +9,8 @@ import 'leaflet-routing-machine';
 declare let L;
 
 // import { MapService } from './map.service';
+import { MapData } from './map-data.model';
+import { ArrayType } from '@angular/compiler';
 
 @Component({
   selector: 'app-wrapper',
@@ -134,19 +136,18 @@ export class MapComponent implements OnInit, AfterViewInit {
         [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ],
         [ mapBounds["_southWest"].lng, mapBounds["_northEast"].lat ],
         [ mapBounds["_southWest"].lng, mapBounds["_southWest"].lat ],
-        [ mapBounds["_northEast"].lng, mapBounds["_southWest"].lat ]
+        [ mapBounds["_northEast"].lng, mapBounds["_southWest"].lat ],
+        [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ]
       ]
       this.fetchMarkerGeo(polygon)
     })
   }
 
   fetchMarkerGeo(polygon) {
+    this.http.post(this.markersGeo, {polygon: polygon})
+    .subscribe(locations => {})
     // let myHeader = new HttpHeaders();
     // myHeader.append('Content-Type', 'application/json');
-    this.http.post(this.markersGeo, {polygon})
-    .subscribe(locations => {
-      console.log(locations)
-    })
     // return { headers: myHeader, withCredentials: true};
   }
 

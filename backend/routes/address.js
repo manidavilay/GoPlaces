@@ -69,7 +69,7 @@ router.get('/:cityCode/:ape', (req, res) => {
   })
 });
 
-// Get localisation
+// Get location
 const getGeo = query => {
   return new Promise((resolve, reject) => {
     fetch(`https://api-adresse.data.gouv.fr/search/?q=${query}&limit=1`)
@@ -88,7 +88,7 @@ const getGeo = query => {
   })
 }
 
-// Add localisation in database at each request
+// Add location in database at each request
 const createNewAddress = address => {
   console.log('createNewAddress')
   return new Promise((resolve, reject) => {
@@ -104,6 +104,7 @@ const createNewAddress = address => {
   })
 }
 
+// Get location by APE code
 router.get('/:cityCode/:ape', (req, res) => {
   MongoClient.connect(url, function (err, db) {
     if (err) throw err
@@ -124,20 +125,59 @@ router.get('/:cityCode/:ape', (req, res) => {
 })
 
 // Fetch markers only in map view
+// router.post('/geo', (req, res) => {
+//   let fetchOption = {
+//     location: {
+//       $geoWithin: {
+//         $geometry: {
+//           polygon: req.body.polygon
+//         }
+//       }
+//     }
+//   }
+//   console.log(req.body.polygon)
+//   MongoClient.connect(url, function (err, db) {
+//     if (err) throw err
+//     var dbo = db.db('app-perso')
+//     dbo.collection('addresses').findOne(
+//       fetchOption,
+//       function (err, result) {
+//         if (err) throw err
+//         res.json(result)
+//         db.close()
+//       })
+//     console.log(err)
+//   })
+// })
 router.post('/geo', (req, res) => {
-  let fetchOption = { location: { $geoWithin: { $polygon: req.body.polygon } } }
-  MongoClient.connect(url, function (err, db) {
-    if (err) throw err
-    var dbo = db.db('app-perso')
-    dbo.collection('addresses').findOne(
-      fetchOption,
-      function (err, result) {
-        if (err) throw err
-        res.json(result)
-        db.close()
-      })
-    console.log(err)
-  })
+  let polygonString = JSON.stringify(req.body.polygon)
+  let fetchOption = {
+    location: {
+      $geoWithin: {
+        $geometry: {
+          type: 'Polygon',
+          coordinates: [
+            [
+              [polygonString]
+            ]
+          ]
+        }
+      }
+    }
+  }
+  console.log(polygonString)
+  // MongoClient.connect(url, function (err, db) {
+  //   if (err) throw err
+  //   var dbo = db.db('app-perso')
+  //   dbo.collection('addresses').findOne(
+  //     fetchOption,
+  //     function (err, result) {
+  //       if (err) throw err
+  //       res.json(result)
+  //       console.log(result)
+  //     }
+  //   )
+  // })
 })
 
 module.exports = router;
