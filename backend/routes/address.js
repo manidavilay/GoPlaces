@@ -149,35 +149,20 @@ router.get('/:cityCode/:ape', (req, res) => {
 //     console.log(err)
 //   })
 // })
-router.post('/geo', (req, res) => {
-  let polygonString = JSON.stringify(req.body.polygon)
-  let fetchOption = {
+router.post("/geo", (req, res) => {
+  Address.find({
     location: {
       $geoWithin: {
         $geometry: {
           type: 'Polygon',
-          coordinates: [
-            [
-              [polygonString]
-            ]
-          ]
+          coordinates: [req.body.polygon],
         }
       }
     }
-  }
-  console.log(polygonString)
-  // MongoClient.connect(url, function (err, db) {
-  //   if (err) throw err
-  //   var dbo = db.db('app-perso')
-  //   dbo.collection('addresses').findOne(
-  //     fetchOption,
-  //     function (err, result) {
-  //       if (err) throw err
-  //       res.json(result)
-  //       console.log(result)
-  //     }
-  //   )
-  // })
-})
+  }).then(result => {
+    res.json(result)
+  })
+  // TODO: handle error with catch
+});
 
 module.exports = router;
