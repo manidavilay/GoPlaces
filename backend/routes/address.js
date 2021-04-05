@@ -125,59 +125,21 @@ router.get('/:cityCode/:ape', (req, res) => {
 })
 
 // Fetch markers only in map view
-// router.post('/geo', (req, res) => {
-//   let fetchOption = {
-//     location: {
-//       $geoWithin: {
-//         $geometry: {
-//           polygon: req.body.polygon
-//         }
-//       }
-//     }
-//   }
-//   console.log(req.body.polygon)
-//   MongoClient.connect(url, function (err, db) {
-//     if (err) throw err
-//     var dbo = db.db('app-perso')
-//     dbo.collection('addresses').findOne(
-//       fetchOption,
-//       function (err, result) {
-//         if (err) throw err
-//         res.json(result)
-//         db.close()
-//       })
-//     console.log(err)
-//   })
-// })
-router.post('/geo', (req, res) => {
-  let polygonString = JSON.stringify(req.body.polygon)
-  let fetchOption = {
+router.post("/geo", (req, res) => {
+  Address.find({
     location: {
       $geoWithin: {
         $geometry: {
           type: 'Polygon',
-          coordinates: [
-            [
-              [polygonString]
-            ]
-          ]
+          coordinates: [req.body.polygon],
         }
       }
     }
-  }
-  console.log(polygonString)
-  // MongoClient.connect(url, function (err, db) {
-  //   if (err) throw err
-  //   var dbo = db.db('app-perso')
-  //   dbo.collection('addresses').findOne(
-  //     fetchOption,
-  //     function (err, result) {
-  //       if (err) throw err
-  //       res.json(result)
-  //       console.log(result)
-  //     }
-  //   )
-  // })
+  })
+  .then(result => {
+    res.json(result)
+  })
+  .catch(err => res.json(err))
 })
 
 module.exports = router;

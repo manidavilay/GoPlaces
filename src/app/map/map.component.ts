@@ -9,8 +9,6 @@ import 'leaflet-routing-machine';
 declare let L;
 
 // import { MapService } from './map.service';
-import { MapData } from './map-data.model';
-import { ArrayType } from '@angular/compiler';
 
 @Component({
   selector: 'app-wrapper',
@@ -55,7 +53,7 @@ export class MapComponent implements OnInit, AfterViewInit {
   private mapContainer: ElementRef < HTMLElement >
 
   // Declare variable related to locations API stored in database
-  private addressesUrl = 'http://localhost:3000/api/address/getall';
+  // private addressesUrl = 'http://localhost:3000/api/address/getall';
 
   // Declare variable related to displayed markers on map view
   private markersGeo = 'http://localhost:3000/api/address/geo';
@@ -70,7 +68,6 @@ export class MapComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.displayMap()
-    this.displayMarkers()
     this.getMapBounds()
     // this.drawPath()
   }
@@ -83,31 +80,10 @@ export class MapComponent implements OnInit, AfterViewInit {
     )
   }
 
-  // Fetch addresses in database and add markers on map function
-  displayMarkers() {
-    this.http.get(this.addressesUrl)
-    .subscribe(locations => {
-      this.address = locations;
-      this.addressesArray = this.address.list;
-      for (let item in locations) {
-        const coordinates = locations[item].location.coordinates
-        if (locations[item].name && locations[item].label) {
-          const locationName = locations[item].name
-          const locationAddress = locations[item].label
-          L.marker([coordinates[1], coordinates[0]], {
-            icon: this.locationMarker
-          }).bindPopup(locationName + '<br><br>' + locationAddress).addTo(this.markerGroup).openPopup();
-          this.markerGroup.addTo(this.map)
-        }
-      }
-    })
-  }
-
   // Get user's geolocation
   getUserLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.watchPosition(position => {
-        console.log(position)
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         L.marker([lat, lng], {
@@ -125,12 +101,6 @@ export class MapComponent implements OnInit, AfterViewInit {
     this.map.on('dragend', () => {
       let width = this.map.getBounds().getEast() - this.map.getBounds().getWest()
       let height = this.map.getBounds().getNorth() - this.map.getBounds().getSouth()
-      /* console.log(
-        'center:' + this.map.getCenter() +'\n'+
-        'width:' + width +'\n'+
-        'height:' + height +'\n'+
-        'size in pixels:' + this.map.getSize()
-      ) */
       let mapBounds = this.map.getBounds()
       const polygon = [
         [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ],
@@ -139,16 +109,27 @@ export class MapComponent implements OnInit, AfterViewInit {
         [ mapBounds["_northEast"].lng, mapBounds["_southWest"].lat ],
         [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ]
       ]
-      this.fetchMarkerGeo(polygon)
+      this.displayMarkerGeo(polygon)
     })
   }
 
-  fetchMarkerGeo(polygon) {
+  // Display markers only in map view
+  displayMarkerGeo(polygon) {
     this.http.post(this.markersGeo, {polygon: polygon})
-    .subscribe(locations => {})
-    // let myHeader = new HttpHeaders();
-    // myHeader.append('Content-Type', 'application/json');
-    // return { headers: myHeader, withCredentials: true};
+    .subscribe(locations => {
+      this.address = locations
+      for (let item in locations) {
+        const coordinates = locations[item].location.coordinates
+        if (locations[item].name && locations[item].label) {
+          const locationName = locations[item].name
+          const locationAddress = locations[item].label
+          L.marker([coordinates[1], coordinates[0]], {
+            icon: this.locationMarker
+          }).bindPopup(locationName + '<br><br>' + locationAddress).addTo(this.markerGroup).openPopup()
+          this.markerGroup.addTo(this.map)
+        }
+      }
+    })
   }
 
   // drawPath() {
