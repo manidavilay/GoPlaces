@@ -15,9 +15,9 @@
         <input type="file" #filePicker (change)="onImagePicked($event)" />
       </div>
       <div *ngFor="let user of users">
-        <div>{{ user.lastname }}</div>
-        <div>{{ user.firstname }}</div>
-        <div>{{ user.email }}</div>
+        <div>{{ user.posts.lastname }}</div>
+        <div>{{ user.posts.firstname }}</div>
+        <div>{{ user.posts.email }}</div>
       </div>
       <!-- <mat-form-field class="input-wrapper">
         <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom">

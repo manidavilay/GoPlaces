@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from '../auth.service'
 import { AccountService } from '../../account/account.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +20,9 @@ export class ProfileComponent {
   hideProfile: boolean = true;
   form: FormGroup;
   imagePreview: any;
+  userIsAuthenticated = false;
+  private authStatusSub: Subscription;
+  userId: string;
   users: any = [];
 
   constructor(
@@ -45,13 +49,21 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
-   this.form = new FormGroup({
+    this.form = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType]
       })
-   })
-   this.fetchUsers()
+    })
+    this.userId = this.authService.getUserId()
+    this.userIsAuthenticated = this.authService.getIsAuth()
+    this.authStatusSub = this.authService
+      .getAuthStatusListener()
+      .subscribe(isAuthenticated => {
+        this.userIsAuthenticated = isAuthenticated
+        this.userId = this.authService.getUserId()
+      })
+    this.fetchCurrentUser(this.userId)
   }
 
   // Image uploader
@@ -71,12 +83,13 @@ export class ProfileComponent {
     this.showProfile = false
   }
 
-  // Fetch user's informations
-  fetchUsers() {
-    this.http.get('http://localhost:3000/api/user/signup')
+  // Fetch current user's informations
+  fetchCurrentUser(userId) {
+    this.authService.getCurrentUser(this.userId)
     .subscribe(response => {
       this.users = response
-      this.users = this.users.posts
+      this.users = []
+      this.users.push(response)
     })
   }
 }
