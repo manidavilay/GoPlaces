@@ -69,14 +69,14 @@ router.post('/login', (req, res, next) => {
   });
 });
 
-router.get('/signup', (req, res, next) => {
-  User.find().then(users => {
-    res.status(200).json({
-      message: "Users fetched successfully!",
-      posts: users
-    });
-  });
-});
+// router.get('/signup', (req, res, next) => {
+//   User.find().then(users => {
+//     res.status(200).json({
+//       message: "Users fetched successfully!",
+//       posts: users
+//     });
+//   });
+// });
 
 router.get('/:id', (req, res, next) => {
   User.findById(req.params.id).then(user => {

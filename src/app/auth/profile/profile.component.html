@@ -3,7 +3,7 @@
     <button (click)="returnToAccount()" class="return-btn">
       <img src="assets/img/go-back.png" alt="">
     </button>
-    <button class="edit-btn">
+    <button class="edit-btn" (click)="editInfosBtn()">
       <img src="assets/img/edit.png">
     </button>
     <form>
@@ -14,21 +14,41 @@
         <button (click)="filePicker.click()" mat-stroked-button type="button">Ajouter/modifier une photo de profil</button>
         <input type="file" #filePicker (change)="onImagePicked($event)" />
       </div>
-      <div *ngFor="let user of users">
-        <div>{{ user.posts.lastname }}</div>
-        <div>{{ user.posts.firstname }}</div>
-        <div>{{ user.posts.email }}</div>
+      <div *ngFor="let user of users" class="infos-block">
+        <div *ngIf="isHidden isShow" class="infos-block__item">
+          <p>Nom</p>
+          {{ user.posts.lastname }}
+        </div>
+
+        <mat-form-field *ngIf="isShow isHidden" class="input-wrapper">
+          <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom">
+        </mat-form-field>
+
+        <div *ngIf="isHidden isShow" class="infos-block__item">
+          <p>Prénom</p>
+          {{ user.posts.firstname }}
+        </div>
+
+        <mat-form-field *ngIf="isShow isHidden" class="input-wrapper">
+          <input matInput name="firstname" ngModel #firstnameInput="ngModel" type="text" placeholder="Prénom">
+        </mat-form-field>
+
+        <div class="infos-block__item">
+          <p>Email</p>
+          {{ user.posts.email }}
+        </div>
+
+        <div class="infos-block__item">
+          <p>Points cumulés</p>
+          <span>320 points</span>
+        </div>
+
+        <mat-form-field *ngIf="isShow isHidden" class="input-wrapper">
+          <input matInput name="password" ngModel #passwordInput="ngModel" type="password" placeholder="Mot de passe">
+        </mat-form-field>
+
       </div>
-      <!-- <mat-form-field class="input-wrapper">
-        <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom">
-      </mat-form-field>
-      <mat-form-field class="input-wrapper">
-        <input matInput name="firstname" ngModel #firstnameInput="ngModel" type="text" placeholder="Prénom">
-      </mat-form-field> -->
-      <!-- <mat-form-field class="input-wrapper">
-        <input matInput name="email" ngModel #emailInput="ngModel" type="email" placeholder="E-mail">
-      </mat-form-field> -->
-      <button mat-raised-button color="accent" type="submit" class="save-infos-btn">Sauvegarder</button>
+      <button *ngIf="isShow" (click)="saveInfosBtn()" mat-raised-button color="accent" type="submit" class="save-infos-btn">Sauvegarder</button>
     </form>
   </div>
 </div>

@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../auth.service'
 import { AccountService } from '../../account/account.service';
 import { Subscription } from 'rxjs';
+import { AuthData } from '../auth-data.model';
 
 @Component({
   selector: 'app-profile',
@@ -18,6 +19,8 @@ import { Subscription } from 'rxjs';
 export class ProfileComponent {
   showProfile: boolean = true;
   hideProfile: boolean = true;
+  isShow = false;
+  isHidden = true;
   form: FormGroup;
   imagePreview: any;
   userIsAuthenticated = false;
@@ -91,5 +94,22 @@ export class ProfileComponent {
       this.users = []
       this.users.push(response)
     })
+  }
+
+  // Show and edit elements on edit button click
+  editInfosBtn() {
+    this.isShow = !this.isShow
+    this.isHidden = !this.isHidden
+  }
+
+  // Save edited elements on save button click
+  saveInfosBtn() {
+    this.isShow = !this.isShow
+    this.isHidden = !this.isHidden
+  }
+
+  editInfos(userId) {
+    const body = {}
+    // this.http.put<AuthData>('http://localhost:3000/api/user/' + userId)
   }
 }

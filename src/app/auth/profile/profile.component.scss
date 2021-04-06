@@ -65,18 +65,38 @@
 
       .file-uploader {
         position: relative;
-        margin: 0 0 40px 0;
+        margin: 0 0 10px 0;
 
         button {
           position: absolute;
           top: 0;
           left: 50%;
           transform: translateX(-50%);
+          font-family: 'Noto Sans JP', sans-serif;
+          font-size: 14px;
+        }
+      }
+
+      .infos-block {
+        width: 100%;
+        margin: 20px auto 0;
+        font-family: 'Noto Sans JP', sans-serif;
+        font-size: 16px;
+        font-weight: 300;
+
+        &__item {
+          margin: 0 0 30px 0;
+        }
+
+        p {
+          font-weight: 400;
+          margin: 0 0 5px 0;
         }
       }
 
       .input-wrapper {
         width: 100%;
+        margin: 0 0 15px 0;
       }
 
       .save-infos-btn {
@@ -85,7 +105,7 @@
         justify-content: center;
         width: 230px;
         height: 55px;
-        margin: 40px auto 0;
+        margin: 10px auto 140px;
         background-color: #F4B63E;
         border-radius: 30px;
         border: none;
