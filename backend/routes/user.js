@@ -29,6 +29,11 @@ router.post('/signup', (req, res, next) => {
             error
           });
         });
+    })
+    .catch(error => {
+      res.status(422).json({
+        error
+      });
     });
 });
 
@@ -94,23 +99,49 @@ router.get('/:id', (req, res, next) => {
 })
 
 router.put('/:id', (req, res, next) => {
-  const user = new User({
-    _id: req.body.id,
-    lastname: req.body.lastname,
-    firstname: req.body.firstname
+  User.findById(req.params.id).then(user => {
+    bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+      if (req.body.lastname == null) {
+        user.lastname = user.lastname
+      } else {
+        user.lastname = req.body.lastname
+      }
+      if (req.body.firstname == null) {
+        user.firstname = user.firstname
+      } else {
+        user.firstname = req.body.firstname
+      }
+      if (req.body.password == null) {
+        user.password = user.password
+      } else {
+        user.password = hash
+      }
+
+      user.save()
+      .then(updatedUser => {
+        return res.status(200).json({
+          message: 'User updated and saved!',
+          data: updatedUser,
+          err: null
+        })
+      })
+      .catch(err => {
+        return res.status(401).json({
+          message: 'User not saved!',
+          data: null,
+          err: err
+        })
+      })
+    })
+    .catch(err => {
+      return res.status(401).json({
+        message: 'User not updated!',
+        data: null,
+        err: err
+      })
+    })
   })
-  user.updateOne({ _id: req.params.id }, user).then(result => {
-    console.log(result)
-    if (result.nModified > 0) {
-      res.status(200).json({
-        message: 'Update successful!'
-      })
-    } else {
-      res.status(401).json({
-        message: 'Update failed!'
-      })
-    }
-  });
 })
 
 router.delete('/:id', (req, res, next) => {

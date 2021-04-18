@@ -6,7 +6,7 @@
     <button class="edit-btn" (click)="editInfosBtn()">
       <img src="assets/img/edit.png">
     </button>
-    <form>
+    <form [formGroup]="form">
       <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
         <img [src]="imagePreview" [alt]="form.value.title">
       </div>
@@ -15,22 +15,22 @@
         <input type="file" #filePicker (change)="onImagePicked($event)" />
       </div>
       <div *ngFor="let user of users" class="infos-block">
-        <div *ngIf="isHidden isShow" class="infos-block__item">
+        <div *ngIf="!isHidden isShow" class="infos-block__item">
           <p>Nom</p>
           {{ user.posts.lastname }}
         </div>
 
-        <mat-form-field *ngIf="isShow isHidden" class="input-wrapper">
-          <input matInput name="lastname" ngModel #lastnameInput="ngModel" type="text" placeholder="Nom">
+        <mat-form-field *ngIf="isShow !isHidden" class="input-wrapper">
+          <input matInput name="lastname" [value]="user.posts.lastname" formControlName="lastname" type="text" placeholder="Nom">
         </mat-form-field>
 
-        <div *ngIf="isHidden isShow" class="infos-block__item">
+        <div *ngIf="!isHidden isShow" class="infos-block__item">
           <p>Prénom</p>
           {{ user.posts.firstname }}
         </div>
 
-        <mat-form-field *ngIf="isShow isHidden" class="input-wrapper">
-          <input matInput name="firstname" ngModel #firstnameInput="ngModel" type="text" placeholder="Prénom">
+        <mat-form-field *ngIf="isShow !isHidden" class="input-wrapper">
+          <input matInput name="firstname" [value]="user.posts.firstname" formControlName="firstname" type="text" placeholder="Prénom">
         </mat-form-field>
 
         <div class="infos-block__item">
@@ -43,12 +43,12 @@
           <span>320 points</span>
         </div>
 
-        <mat-form-field *ngIf="isShow isHidden" class="input-wrapper">
-          <input matInput name="password" ngModel #passwordInput="ngModel" type="password" placeholder="Mot de passe">
+        <mat-form-field *ngIf="isShow !isHidden" class="input-wrapper">
+          <input matInput name="password" formControlName="password" type="password" placeholder="Mot de passe">
         </mat-form-field>
 
       </div>
-      <button *ngIf="isShow" (click)="saveInfosBtn()" mat-raised-button color="accent" type="submit" class="save-infos-btn">Sauvegarder</button>
+      <button *ngIf="isShow" (click)="saveInfos()" mat-raised-button color="accent" type="submit" class="save-infos-btn">Sauvegarder</button>
     </form>
   </div>
 </div>

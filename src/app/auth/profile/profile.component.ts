@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router, NavigationStart } from '@angular/router';
 import { mimeType } from './mime-type.validator'
 import { ActivatedRoute } from "@angular/router";
@@ -20,7 +20,7 @@ export class ProfileComponent {
   showProfile: boolean = true;
   hideProfile: boolean = true;
   isShow = false;
-  isHidden = true;
+  isHidden = false;
   form: FormGroup;
   imagePreview: any;
   userIsAuthenticated = false;
@@ -52,20 +52,31 @@ export class ProfileComponent {
   }
 
   ngOnInit() {
+    this.userId = this.authService.getUserId()
+    this.userIsAuthenticated = this.authService.getIsAuth()
+    this.authStatusSub = this.authService
+    .getAuthStatusListener()
+    .subscribe(isAuthenticated => {
+      this.userIsAuthenticated = isAuthenticated
+      this.userId = this.authService.getUserId()
+    })
+
     this.form = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
         asyncValidators: [mimeType]
+      }),
+      lastname: new FormControl(null, {
+        validators: [Validators.required]
+      }),
+      firstname: new FormControl(null, {
+        validators: [Validators.required]
+      }),
+      password: new FormControl(null, {
+        validators: [Validators.required]
       })
     })
-    this.userId = this.authService.getUserId()
-    this.userIsAuthenticated = this.authService.getIsAuth()
-    this.authStatusSub = this.authService
-      .getAuthStatusListener()
-      .subscribe(isAuthenticated => {
-        this.userIsAuthenticated = isAuthenticated
-        this.userId = this.authService.getUserId()
-      })
+
     this.fetchCurrentUser(this.userId)
   }
 
@@ -88,12 +99,14 @@ export class ProfileComponent {
 
   // Fetch current user's informations
   fetchCurrentUser(userId) {
-    this.authService.getCurrentUser(this.userId)
-    .subscribe(response => {
-      this.users = response
-      this.users = []
-      this.users.push(response)
-    })
+    if (this.userId) {
+      this.authService.getCurrentUser(this.userId)
+      .subscribe(response => {
+        this.users = response
+        this.users = []
+        this.users.push(response)
+      })
+    }
   }
 
   // Show and edit elements on edit button click
@@ -102,14 +115,10 @@ export class ProfileComponent {
     this.isHidden = !this.isHidden
   }
 
-  // Save edited elements on save button click
-  saveInfosBtn() {
+  // Save user's infos on save button click
+  saveInfos() {
+    this.authService.updateUserInfos(this.userId, this.form.value.lastname, this.form.value.firstname, this.form.value.password)
     this.isShow = !this.isShow
     this.isHidden = !this.isHidden
-  }
-
-  editInfos(userId) {
-    const body = {}
-    // this.http.put<AuthData>('http://localhost:3000/api/user/' + userId)
   }
 }

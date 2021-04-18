@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ProfileComponent } from './profile/profile.component';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
@@ -102,6 +103,19 @@ export class AuthService {
     return this.http.get('http://localhost:3000/api/user/' + userId)
   }
 
+  // Update user's infos
+  updateUserInfos(userId, lastname: string, firstname: string, password: string) {
+    const body = {
+      lastname: lastname,
+      firstname: firstname,
+      password: password
+    }
+    this.http.put<any>('http://localhost:3000/api/user/' + userId, body)
+    .subscribe(data => {
+      console.log(data)
+    })
+  }
+
   private setAuthTimer(duration: number) {
     console.log('Setting timer: ' + duration);
     this.tokenTimer = setTimeout(() => {
@@ -135,3 +149,7 @@ export class AuthService {
     }
   }
 }
+function retry(arg0: number): import("rxjs").OperatorFunction<ArrayBuffer, unknown> {
+  throw new Error("Function not implemented.");
+}
+
