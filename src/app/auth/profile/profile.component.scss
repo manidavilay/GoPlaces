@@ -105,7 +105,7 @@
         justify-content: center;
         width: 230px;
         height: 55px;
-        margin: 10px auto 140px;
+        margin: 10px auto 30px;
         background-color: #F4B63E;
         border-radius: 30px;
         border: none;
@@ -114,6 +114,15 @@
         font-size: 20px;
         color: #FFFFFF;
         box-shadow: none;
+      }
+
+      .delete-account-btn {
+        border: none;
+        background-color: transparent;
+        box-shadow: none;
+        color: red;
+        text-decoration: underline;
+        font-size: 17px;
       }
     }
   }

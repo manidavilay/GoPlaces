@@ -116,6 +116,14 @@ export class AuthService {
     })
   }
 
+  // Delete user
+  deleteUser(userId) {
+    this.http.delete<any>('http://localhost:3000/api/user/' + userId)
+    .subscribe(data => {
+      console.log(data)
+    })
+  }
+
   private setAuthTimer(duration: number) {
     console.log('Setting timer: ' + duration);
     this.tokenTimer = setTimeout(() => {

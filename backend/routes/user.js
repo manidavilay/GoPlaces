@@ -8,6 +8,7 @@ const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
+// Create user
 router.post('/signup', (req, res, next) => {
   bcrypt.hash(req.body.password, 10)
     .then(hash => {
@@ -37,6 +38,7 @@ router.post('/signup', (req, res, next) => {
     });
 });
 
+// Log user
 router.post('/login', (req, res, next) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
@@ -83,6 +85,7 @@ router.post('/login', (req, res, next) => {
 //   });
 // });
 
+// Get user by id
 router.get('/:id', (req, res, next) => {
   User.findById(req.params.id).then(user => {
     if (user) {
@@ -98,7 +101,8 @@ router.get('/:id', (req, res, next) => {
   })
 })
 
-router.put('/:id', (req, res, next) => {
+// Update user by id
+router.put('/:id', checkAuth, (req, res, next) => {
   User.findById(req.params.id).then(user => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
@@ -144,11 +148,19 @@ router.put('/:id', (req, res, next) => {
   })
 })
 
-router.delete('/:id', (req, res, next) => {
-  User.deleteOne({ _id: req.params.id }).then(result => {
-    console.log(result)
+// Delete user by id
+router.delete('/:id', checkAuth, (req, res, next) => {
+  User.deleteOne({ _id: req.params.id })
+  .then(result => {
     res.status(200).json({
       message: 'User deleted!'
+    })
+  })
+  .catch(err => {
+    return res.status(401).json({
+      message: 'User not deleted!',
+      data: null,
+      err
     })
   })
 })

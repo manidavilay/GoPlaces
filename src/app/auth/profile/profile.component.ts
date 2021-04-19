@@ -121,4 +121,10 @@ export class ProfileComponent {
     this.isShow = !this.isShow
     this.isHidden = !this.isHidden
   }
+
+  // Delete user's account
+  deleteUserAccount() {
+    this.authService.deleteUser(this.userId)
+    this.authService.logout()
+  }
 }
