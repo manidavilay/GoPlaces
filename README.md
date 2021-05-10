@@ -2,6 +2,8 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.2.0.
 
+GoPlaces App is a map-type application created with Node.js and Angular.js in order to help merchants by putting them on the map and giving them visibility to all users to see, and visit their place. The user can scan a code QR at the merchant's place and cumulate points. To a certain number of points, the user can win a discount code usable at the already visited merchants.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
