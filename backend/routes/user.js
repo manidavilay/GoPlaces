@@ -71,7 +71,8 @@ router.post('/login', (req, res, next) => {
   })
   .catch(err => {
     return res.status(401).json({
-      message: "Authentication failed !"
+      message: "Authentication failed !",
+      err
     });
   });
 });
@@ -87,7 +88,8 @@ router.post('/login', (req, res, next) => {
 
 // Get user by id
 router.get('/:id', (req, res, next) => {
-  User.findById(req.params.id).then(user => {
+  User.findById(req.params.id)
+  .then(user => {
     if (user) {
       res.status(200).json({
         message: "User fetched successfully!",
@@ -153,7 +155,8 @@ router.delete('/:id', checkAuth, (req, res, next) => {
   User.deleteOne({ _id: req.params.id })
   .then(result => {
     res.status(200).json({
-      message: 'User deleted!'
+      message: 'User deleted!',
+      result
     })
   })
   .catch(err => {

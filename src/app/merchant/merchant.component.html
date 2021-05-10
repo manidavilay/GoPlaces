@@ -1,0 +1,21 @@
+<div class="merchant" *ngIf="showMerchant">
+  <div class="merchant__body">
+    <button (click)="returnToProfile()" class="return-btn">
+      <img src="assets/img/go-back.png" alt="">
+    </button>
+    <form>
+      <mat-form-field class="input-wrapper">
+        <input matInput name="shopName" type="text" placeholder="Nom du commerce">
+      </mat-form-field>
+      <mat-form-field class="input-wrapper">
+        <input matInput name="sireneNumber" type="text" placeholder="Numéro Sirene">
+      </mat-form-field>
+      <mat-form-field class="input-wrapper">
+        <input matInput name="address" type="text" placeholder="Adresse">
+      </mat-form-field>
+      <button mat-raised-button type="submit" class="save-infos-btn">Générer un QR code</button>
+      <button mat-raised-button type="submit" class="save-infos-btn">Sauvegarder</button>
+      <button mat-raised-button type="submit" class="delete-merchant-btn">Supprimer le commerce</button>
+    </form>
+  </div>
+</div>

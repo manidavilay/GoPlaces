@@ -21,6 +21,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { HeaderComponent } from './header/header.component';
 import { AccountComponent } from './account/account.component';
 import { ProfileComponent } from './auth/profile/profile.component';
+import { MerchantComponent } from './merchant/merchant.component';
 
 // Import interceptors
 import { AuthInterceptor } from './auth/auth-interceptor';
@@ -30,6 +31,7 @@ import { AuthInterceptor } from './auth/auth-interceptor';
 // import { MapService } from './map/map.service';
 import { NavigationService } from './navigation/navigation.service';
 import { AccountService } from './account/account.service';
+import { ProfileService } from './auth/profile/profile.service';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,8 @@ import { AccountService } from './account/account.service';
     NavigationComponent,
     HeaderComponent,
     AccountComponent,
-    ProfileComponent
+    ProfileComponent,
+    MerchantComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +62,8 @@ import { AccountService } from './account/account.service';
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     // MapService,
     NavigationService,
-    AccountService
+    AccountService,
+    ProfileService
     // { provide: HTTP_INTERCEPTORS, useClass: MapInterceptor, multi: true}
   ],
 

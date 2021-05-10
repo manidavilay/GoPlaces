@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
 @Injectable()
-export class NavigationService {
+export class ProfileService {
   private subject = new Subject<any>();
 
-  showAccount() {
+  showMerchant() {
     this.subject.next()
   }
 
-  hideAccount() {
+  hideMerchant() {
     this.subject.next()
   }
 

@@ -48,6 +48,7 @@
         </mat-form-field>
 
       </div>
+      <button *ngIf="!isHidden" (click)="showMerchant()" mat-raised-button color="accent" type="submit" class="merchant-btn">J'ai un commerce !</button>
       <button *ngIf="isShow" (click)="saveInfos()" mat-raised-button color="accent" type="submit" class="save-infos-btn">Sauvegarder</button>
       <button *ngIf="isShow" (click)="deleteUserAccount()" mat-raised-button type="submit" class="delete-account-btn">Supprimer le compte</button>
     </form>

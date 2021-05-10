@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AuthService } from '../auth.service'
 import { AccountService } from '../../account/account.service';
+import { ProfileService } from '../../auth/profile/profile.service';
 import { Subscription } from 'rxjs';
 import { AuthData } from '../auth-data.model';
 
@@ -33,6 +34,7 @@ export class ProfileComponent {
     public route: ActivatedRoute,
     private accountService: AccountService,
     private authService: AuthService,
+    private profileService: ProfileService,
     private http: HttpClient
     ) {
     // Show / Hide profile on click
@@ -127,4 +129,12 @@ export class ProfileComponent {
     this.authService.deleteUser(this.userId)
     this.authService.logout()
   }
+
+  showMerchant(): void {
+    this.profileService.showMerchant()
+  }
+
+  // hideAccount(): void {
+  //   this.navigationService.hideAccount()
+  // }
 }
