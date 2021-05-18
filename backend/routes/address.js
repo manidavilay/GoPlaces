@@ -55,7 +55,8 @@ router.get('/:cityCode/:ape', (req, res) => {
             name: item.uniteLegale.denominationUniteLegale,
             location: address.features[0].geometry,
             label: address.features[0].properties.label,
-            postalCode: req.params.cityCode
+            postalCode: req.params.cityCode,
+            associatedKey: createAssociatedKey()
           }
           let mongoAddresses = await createNewAddress(newLocation)
 
@@ -68,6 +69,11 @@ router.get('/:cityCode/:ape', (req, res) => {
       })
   })
 });
+
+// Generate merchants associated random key
+const createAssociatedKey = () => {
+  return Date.now()
+}
 
 // Get location
 const getGeo = query => {
@@ -90,7 +96,6 @@ const getGeo = query => {
 
 // Add location in database at each request
 const createNewAddress = address => {
-  console.log('createNewAddress')
   return new Promise((resolve, reject) => {
     Address.create(address)
       .then(data => {
