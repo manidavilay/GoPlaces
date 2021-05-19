@@ -3,19 +3,27 @@
     <button (click)="returnToProfile()" class="return-btn">
       <img src="assets/img/go-back.png" alt="">
     </button>
-    <form>
-      <!-- <mat-form-field class="input-wrapper">
+    <form [formGroup]="form">
+      <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
+        <img [src]="imagePreview" [alt]="form.value.title">
+      </div>
+      <div class="file-uploader">
+        <button (click)="filePicker.click()" mat-stroked-button type="button">Ajouter/modifier un logo</button>
+        <input type="file" #filePicker (change)="onImagePicked($event)" />
+      </div>
+      <mat-form-field class="input-wrapper">
         <input matInput name="shopName" type="text" placeholder="Nom du commerce">
       </mat-form-field>
       <mat-form-field class="input-wrapper">
-        <input matInput name="sireneNumber" type="text" placeholder="Numéro Sirene">
+        <input matInput name="shopAddress" type="text" placeholder="Adresse du commerce">
       </mat-form-field>
       <mat-form-field class="input-wrapper">
-        <input matInput name="address" type="text" placeholder="Adresse">
-      </mat-form-field> -->
-      <button mat-raised-button type="submit" class="save-infos-btn">Générer un QR code</button>
-      <button mat-raised-button type="submit" class="save-infos-btn">Sauvegarder</button>
-      <button mat-raised-button type="submit" class="delete-merchant-btn">Supprimer le commerce</button>
+        <input matInput name="sireneNumber" type="text" placeholder="N° SIREN">
+      </mat-form-field>
+      <mat-form-field class="input-wrapper">
+        <input matInput name="sireneNumber" type="text" placeholder="N° SIRET">
+      </mat-form-field>
+      <button mat-raised-button type="submit" class="save-infos-btn">Ajouter mon commerce</button>
     </form>
   </div>
 </div>

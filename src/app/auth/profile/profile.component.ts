@@ -18,8 +18,7 @@ import { AuthData } from '../auth-data.model';
 })
 
 export class ProfileComponent {
-  showProfile: boolean = true;
-  hideProfile: boolean = true;
+  showProfile: boolean = false;
   isShow = false;
   isHidden = false;
   form: FormGroup;
@@ -39,15 +38,12 @@ export class ProfileComponent {
     ) {
     // Show / Hide profile on click
     this.accountService.getMessage().subscribe(message => {
-      this.showProfile = !this.showProfile
-      this.hideProfile = !this.hideProfile
+      this.showProfile = true
     })
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {
           this.showProfile = false
-        } else {
-          this.hideProfile = true
         }
       }
     })

@@ -9,10 +9,6 @@ export class ProfileService {
     this.subject.next()
   }
 
-  hideMerchant() {
-    this.subject.next()
-  }
-
   getMessage(): Observable<any> {
       return this.subject.asObservable();
   }

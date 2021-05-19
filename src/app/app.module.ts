@@ -22,6 +22,7 @@ import { HeaderComponent } from './header/header.component';
 import { AccountComponent } from './account/account.component';
 import { ProfileComponent } from './auth/profile/profile.component';
 import { MerchantComponent } from './merchant/merchant.component';
+import { RewardsComponent } from './rewards/rewards.components';
 
 // Import interceptors
 import { AuthInterceptor } from './auth/auth-interceptor';
@@ -43,7 +44,8 @@ import { ProfileService } from './auth/profile/profile.service';
     HeaderComponent,
     AccountComponent,
     ProfileComponent,
-    MerchantComponent
+    MerchantComponent,
+    RewardsComponent
   ],
   imports: [
     BrowserModule,

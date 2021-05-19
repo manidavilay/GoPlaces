@@ -1,4 +1,4 @@
-<div class="profile" *ngIf="showProfile hideProfile">
+<div class="profile" *ngIf="showProfile">
   <div class="profile__body">
     <button (click)="returnToAccount()" class="return-btn">
       <img src="assets/img/go-back.png" alt="">
@@ -36,11 +36,6 @@
         <div class="infos-block__item">
           <p>Email</p>
           {{ user.posts.email }}
-        </div>
-
-        <div class="infos-block__item">
-          <p>Points cumulés</p>
-          <span>320 points</span>
         </div>
 
         <mat-form-field *ngIf="isShow !isHidden" class="input-wrapper">

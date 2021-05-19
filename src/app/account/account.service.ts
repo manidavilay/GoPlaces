@@ -9,7 +9,7 @@ export class AccountService {
       this.subject.next()
     }
 
-    hideProfile() {
+    showRewards() {
       this.subject.next()
     }
 

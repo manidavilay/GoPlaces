@@ -13,7 +13,7 @@ import { AccountService } from '../account/account.service';
 
 export class AccountComponent {
   message: any;
-  showAccount: boolean = true;
+  showAccount: boolean = false;
   hideAccount: boolean = true;
 
   constructor(private router: Router, public authService: AuthService, private navigationService: NavigationService, private accountService: AccountService) {
@@ -36,8 +36,8 @@ export class AccountComponent {
     this.accountService.showProfile()
   }
 
-  hideProfile(): void {
-    this.accountService.hideProfile()
+  showRewards(): void {
+    this.accountService.showRewards()
   }
 
   onLogout() {
