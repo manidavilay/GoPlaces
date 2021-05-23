@@ -2,6 +2,7 @@ const express = require('express');
 const fetch = require('node-fetch');
 const { resolve } = require('path');
 const MongoClient = require('mongodb').MongoClient;
+const QRCode = require('qrcode');
 
 const Address = require('../models/address');
 
@@ -51,15 +52,32 @@ router.get('/:cityCode/:ape', (req, res) => {
           }
 
           let address = await getGeo(query)
-          const newLocation = {
+          // let dataqrcode = ''
+          let newLocation = {
             name: item.uniteLegale.denominationUniteLegale,
             location: address.features[0].geometry,
             label: address.features[0].properties.label,
             postalCode: req.params.cityCode,
             associatedKey: createAssociatedKey()
           }
-          let mongoAddresses = await createNewAddress(newLocation)
 
+          // Turn addresses into QR code
+          let stringData = JSON.stringify(newLocation)
+          const generateQrCode = async () => {
+            try {
+              const code = await QRCode.toDataURL(stringData)
+              let newObject = Object.assign({qrCode: code}, newLocation)
+              Address.update({}, {qrCode: code}, {multi: true}, (err, raw) => {
+                if (err) return console.log(err)
+              })
+            }
+            catch (err) {
+              console.log(err)
+            }
+          }
+          generateQrCode()
+
+          let mongoAddresses = await createNewAddress(newLocation)
           merchantLocations.push(mongoAddresses)
         }
         return res.json(merchantLocations)
@@ -76,7 +94,7 @@ const createAssociatedKey = () => {
 }
 
 // Get location
-const getGeo = query => {
+const getGeo = (query) => {
   return new Promise((resolve, reject) => {
     fetch(`https://api-adresse.data.gouv.fr/search/?q=${query}&limit=1`)
       .then(response => {
@@ -87,7 +105,6 @@ const getGeo = query => {
         }
       })
       .then(address => {
-        console.log('new address', address)
         return resolve(address)
       })
       .catch(err => reject(err))
@@ -95,11 +112,11 @@ const getGeo = query => {
 }
 
 // Add location in database at each request
-const createNewAddress = address => {
+const createNewAddress = (address) => {
   return new Promise((resolve, reject) => {
     Address.create(address)
       .then(data => {
-        console.log(data)
+        // console.log(data)
         return resolve(data)
       })
       .catch(err => {

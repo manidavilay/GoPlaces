@@ -21,10 +21,10 @@ export class RewardsComponent {
     private accountService: AccountService,
     ) {
     // Show / Hide rewards on click TODO: Revoir communication entre les composants multiples
-    this.accountService.getMessage().subscribe(message => {
-      this.showRewards = true
-      console.log('test')
-    })
+    // this.accountService.getMessage().subscribe(message => {
+    //   this.showRewards = true
+    //   console.log('test')
+    // })
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {

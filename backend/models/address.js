@@ -8,7 +8,8 @@ const addressSchema = mongoose.Schema({
   },
   label: String,
   postalCode: Number,
-  associatedKey: Number
+  associatedKey: Number,
+  qrCode: String
 });
 
 addressSchema.index({ location: "2dsphere" });

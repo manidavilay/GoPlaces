@@ -1,0 +1,32 @@
+/* ------------- POINTS ------------- */
+
+.points {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1020;
+  width: 100%;
+  height: 100%;
+  background-color: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+
+  &__body {
+    position: relative;
+    padding: 170px 0 100px 0;
+
+    .return-btn {
+      position: absolute;
+      top: 119px;
+      left: 30px;
+      width: 37px;
+      border: none;
+      background: none;
+
+      img {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -22,7 +22,7 @@ import { HeaderComponent } from './header/header.component';
 import { AccountComponent } from './account/account.component';
 import { ProfileComponent } from './auth/profile/profile.component';
 import { MerchantComponent } from './merchant/merchant.component';
-import { RewardsComponent } from './rewards/rewards.components';
+import { RewardsComponent } from './rewards/rewards.component';
 
 // Import interceptors
 import { AuthInterceptor } from './auth/auth-interceptor';
