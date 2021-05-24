@@ -66,10 +66,12 @@ router.get('/:cityCode/:ape', (req, res) => {
           const generateQrCode = async () => {
             try {
               const code = await QRCode.toDataURL(stringData)
+              // const code = await QRCode.toString(stringData)
               let newObject = Object.assign({qrCode: code}, newLocation)
-              Address.update({}, {qrCode: code}, {multi: true}, (err, raw) => {
-                if (err) return console.log(err)
-              })
+              // console.log(newObject)
+              Address.insertMany(newObject)
+              console.log(newObject)
+              // TODO: replace old address db by new one
             }
             catch (err) {
               console.log(err)
@@ -136,6 +138,7 @@ router.get('/:cityCode/:ape', (req, res) => {
         location: address.features[0].geometry,
         label: address.features[0].properties.label,
         postalCode: req.params.cityCode,
+        qrCode: code
       },
       function (err, result) {
         if (err) throw err
@@ -143,6 +146,23 @@ router.get('/:cityCode/:ape', (req, res) => {
         db.close()
       })
     console.log(err)
+  })
+})
+
+// Get address by id
+router.get('/:id', (req, res) => {
+  Address.findById(req.params.id)
+  .then(address => {
+    if (address) {
+      res.status(200).json({
+        message: "Address fetched successfully!",
+        posts: address
+      });
+    } else {
+      res.status(400).json({
+        message: 'Address not found!'
+      });
+    }
   })
 })
 

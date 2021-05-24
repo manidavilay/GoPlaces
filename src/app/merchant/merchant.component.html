@@ -25,5 +25,13 @@
       </mat-form-field>
       <button mat-raised-button type="submit" class="save-infos-btn">Ajouter mon commerce</button>
     </form>
+    <div class="merchant__qr-code-popup" *ngIf="showQrCodePopup">
+      <button (click)="closeQrCodePopup()" class="close-btn">
+        <img src="assets/img/close-icon.svg" alt="">
+      </button>
+      <div class="qr-code" *ngFor="let address of addresses">
+        <img id="qr-code" src="{{ address.posts.qrCode }}">
+      </div>
+    </div>
   </div>
 </div>

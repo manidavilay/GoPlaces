@@ -33,6 +33,7 @@ import { AuthInterceptor } from './auth/auth-interceptor';
 import { NavigationService } from './navigation/navigation.service';
 import { AccountService } from './account/account.service';
 import { ProfileService } from './auth/profile/profile.service';
+import { MerchantService } from './merchant/merchant.service';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ProfileService } from './auth/profile/profile.service';
     // MapService,
     NavigationService,
     AccountService,
-    ProfileService
+    ProfileService,
+    MerchantService
     // { provide: HTTP_INTERCEPTORS, useClass: MapInterceptor, multi: true}
   ],
 
