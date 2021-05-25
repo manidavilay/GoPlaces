@@ -3,7 +3,7 @@
     <button (click)="returnToProfile()" class="return-btn">
       <img src="assets/img/go-back.png" alt="">
     </button>
-    <form [formGroup]="form">
+    <!-- <form [formGroup]="form">
       <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image').valid">
         <img [src]="imagePreview" [alt]="form.value.title">
       </div>
@@ -24,7 +24,31 @@
         <input matInput name="sireneNumber" type="text" placeholder="N° SIRET">
       </mat-form-field>
       <button mat-raised-button type="submit" class="save-infos-btn">Ajouter mon commerce</button>
-    </form>
+    </form> -->
+    <div class="merchant__informations" *ngFor="let address of addresses">
+      <img src="assets/img/merchant-logo.jpg" alt="" class="merchant-logo">
+      <div class="informations-item">
+        <p>Nom du commerce</p>
+        {{ address.posts.name }}
+      </div>
+      <div class="informations-item">
+        <p>Type de commerce:</p>
+        Cafés/salons de thé
+      </div>
+      <div class="informations-item">
+        <p>Adresse du commerce:</p>
+        {{ address.posts.label }}
+      </div>
+      <div class="informations-item">
+        <p>N° SIREN</p>
+        {{ address.posts.siren }}
+      </div>
+      <div class="informations-item">
+        <p>N° SIRET</p>
+        {{ address.posts.siret }}
+      </div>
+    </div>
+    <button (click)="openQrcodePopup()" mat-raised-button color="accent" type="submit" class="open-popup-btn">Mon QR Code</button>
     <div class="merchant__qr-code-popup" *ngIf="showQrCodePopup">
       <button (click)="closeQrCodePopup()" class="close-btn">
         <img src="assets/img/close-icon.svg" alt="">

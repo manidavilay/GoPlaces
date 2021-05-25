@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const addressSchema = mongoose.Schema({
+  siren: String,
+  siret: String,
   name: String,
   location: {
     type: { type: String },
@@ -9,7 +11,8 @@ const addressSchema = mongoose.Schema({
   label: String,
   postalCode: Number,
   associatedKey: Number,
-  qrCode: String
+  qrCode: String,
+  points: String
 });
 
 addressSchema.index({ location: "2dsphere" });

@@ -11,6 +11,6 @@ export class MerchantService {
 
   // Get address by id
   getAddressesData(): Observable<any> {
-    return this.http.get('http://localhost:3000/api/address/60ac337f00884d6d1a5e11e7/')
+    return this.http.get('http://localhost:3000/api/address/60ad76ef7d137c51f49c0749/')
   }
 }

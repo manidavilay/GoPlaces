@@ -16,7 +16,7 @@ export class MerchantComponent {
   form: FormGroup;
   imagePreview: any;
   showMerchant: boolean = false;
-  showQrCodePopup: boolean = true;
+  showQrCodePopup: boolean = false;
   addresses: any = [];
   // hideAccount: boolean = true;
 
@@ -53,6 +53,11 @@ export class MerchantComponent {
   // Back to profile on click
   returnToProfile() {
     this.showMerchant = false
+  }
+
+  // Open QR code popup on click
+  openQrcodePopup() {
+    this.showQrCodePopup = true
   }
 
   // Close QR code popup on click

@@ -50,15 +50,23 @@ router.get('/:cityCode/:ape', (req, res) => {
           if (item.adresseEtablissement.codePostalEtablissement !== null) {
             query += `+${item.adresseEtablissement.codePostalEtablissement}`
           }
+          if (item.siren !== null) {
+            query += `+${item.siren}`
+          }
+          if (item.siret !== null) {
+            query += `+${item.siret}`
+          }
 
           let address = await getGeo(query)
-          // let dataqrcode = ''
           let newLocation = {
+            siren: item.siren,
+            siret: item.siret,
             name: item.uniteLegale.denominationUniteLegale,
             location: address.features[0].geometry,
             label: address.features[0].properties.label,
             postalCode: req.params.cityCode,
-            associatedKey: createAssociatedKey()
+            associatedKey: createAssociatedKey(),
+            points: '10 points'
           }
 
           // Turn addresses into QR code
@@ -66,12 +74,8 @@ router.get('/:cityCode/:ape', (req, res) => {
           const generateQrCode = async () => {
             try {
               const code = await QRCode.toDataURL(stringData)
-              // const code = await QRCode.toString(stringData)
-              let newObject = Object.assign({qrCode: code}, newLocation)
-              // console.log(newObject)
+              let newObject = Object.assign(newLocation, {qrCode: code})
               Address.insertMany(newObject)
-              console.log(newObject)
-              // TODO: replace old address db by new one
             }
             catch (err) {
               console.log(err)
@@ -118,7 +122,6 @@ const createNewAddress = (address) => {
   return new Promise((resolve, reject) => {
     Address.create(address)
       .then(data => {
-        // console.log(data)
         return resolve(data)
       })
       .catch(err => {
@@ -134,17 +137,19 @@ router.get('/:cityCode/:ape', (req, res) => {
     if (err) throw err
     var dbo = db.db('app-perso')
     dbo.collection('addresses').findOne({
-        name: item.uniteLegale.denominationUniteLegale,
-        location: address.features[0].geometry,
-        label: address.features[0].properties.label,
-        postalCode: req.params.cityCode,
-        qrCode: code
-      },
-      function (err, result) {
-        if (err) throw err
-        res.json(result)
-        db.close()
-      })
+      siren: item.siren,
+      siret: item.siret,
+      name: item.uniteLegale.denominationUniteLegale,
+      location: address.features[0].geometry,
+      label: address.features[0].properties.label,
+      postalCode: req.params.cityCode,
+      qrCode: code
+    },
+    function (err, result) {
+      if (err) throw err
+      res.json(result)
+      db.close()
+    })
     console.log(err)
   })
 })
