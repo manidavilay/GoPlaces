@@ -5,11 +5,12 @@ import { Observable, Subject } from 'rxjs';
 export class ProfileService {
   private subject = new Subject<any>();
 
+  // Show merchant on click
   showMerchant() {
-    this.subject.next()
+    this.subject.next();
   }
 
   getMessage(): Observable<any> {
-      return this.subject.asObservable();
+    return this.subject.asObservable();
   }
 }

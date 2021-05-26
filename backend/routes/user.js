@@ -9,37 +9,37 @@ const checkAuth = require('../middleware/check-auth');
 const router = express.Router();
 
 // Create user
-router.post('/signup', (req, res, next) => {
+router.post('/signup', (req, res) => {
   bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      const user = new User({
-        lastname: req.body.lastname,
-        firstname: req.body.firstname,
-        email: req.body.email,
-        password: hash
+  .then(hash => {
+    const user = new User({
+      lastname: req.body.lastname,
+      firstname: req.body.firstname,
+      email: req.body.email,
+      password: hash
+    });
+    user.save()
+    .then(result => {
+      res.status(201).json({
+        message: 'User created!',
+        result
       });
-      user.save()
-        .then(result => {
-          res.status(201).json({
-            message: 'User created!',
-            result
-          });
-        })
-        .catch(error => {
-          res.status(422).json({
-            error
-          });
-        });
     })
     .catch(error => {
       res.status(422).json({
         error
       });
     });
+  })
+  .catch(error => {
+    res.status(422).json({
+      error
+    });
+  });
 });
 
 // Log user
-router.post('/login', (req, res, next) => {
+router.post('/login', (req, res) => {
   let fetchedUser;
   User.findOne({ email: req.body.email })
   .then(user => {
@@ -77,17 +77,8 @@ router.post('/login', (req, res, next) => {
   });
 });
 
-// router.get('/signup', (req, res, next) => {
-//   User.find().then(users => {
-//     res.status(200).json({
-//       message: "Users fetched successfully!",
-//       posts: users
-//     });
-//   });
-// });
-
 // Get user by id
-router.get('/:id', (req, res, next) => {
+router.get('/:id', (req, res) => {
   User.findById(req.params.id)
   .then(user => {
     if (user) {
@@ -100,11 +91,11 @@ router.get('/:id', (req, res, next) => {
         message: 'User not found!'
       });
     }
-  })
-})
+  });
+});
 
 // Update user by id
-router.put('/:id', checkAuth, (req, res, next) => {
+router.put('/:id', checkAuth, (req, res) => {
   User.findById(req.params.id).then(user => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
@@ -123,49 +114,48 @@ router.put('/:id', checkAuth, (req, res, next) => {
       } else {
         user.password = hash
       }
-
       user.save()
       .then(updatedUser => {
         return res.status(200).json({
           message: 'User updated and saved!',
           data: updatedUser,
           err: null
-        })
+        });
       })
       .catch(err => {
         return res.status(401).json({
           message: 'User not saved!',
           data: null,
           err: err
-        })
-      })
+        });
+      });
     })
     .catch(err => {
       return res.status(401).json({
         message: 'User not updated!',
         data: null,
         err: err
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});
 
 // Delete user by id
-router.delete('/:id', checkAuth, (req, res, next) => {
+router.delete('/:id', checkAuth, (req, res) => {
   User.deleteOne({ _id: req.params.id })
   .then(result => {
     res.status(200).json({
       message: 'User deleted!',
       result
-    })
+    });
   })
   .catch(err => {
     return res.status(401).json({
       message: 'User not deleted!',
       data: null,
       err
-    })
-  })
-})
+    });
+  });
+});
 
 module.exports = router;

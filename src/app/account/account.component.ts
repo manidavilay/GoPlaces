@@ -16,32 +16,36 @@ export class AccountComponent {
   showAccount: boolean = false;
   hideAccount: boolean = true;
 
+  // Show/hide account on click
   constructor(private router: Router, public authService: AuthService, private navigationService: NavigationService, private accountService: AccountService) {
     this.navigationService.getMessage().subscribe(message => {
-      this.showAccount = !this.showAccount
-      this.hideAccount = !this.hideAccount
-    })
+      this.showAccount = !this.showAccount;
+      this.hideAccount = !this.hideAccount;
+    });
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {
-          this.showAccount = false
+          this.showAccount = false;
         } else {
-          this.hideAccount = true
+          this.hideAccount = true;
         }
       }
-    })
+    });
   }
 
+  // Show profile on click
   showProfile(): void {
-    this.accountService.showProfile()
+    this.accountService.showProfile();
   }
 
+  // Show rewards on click
   showRewards(): void {
-    this.accountService.showRewards()
+    this.accountService.showRewards();
   }
 
+  // Log out on click
   onLogout() {
-    this.showAccount = !this.showAccount
-    this.authService.logout()
+    this.showAccount = !this.showAccount;
+    this.authService.logout();
   }
 }

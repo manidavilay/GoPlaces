@@ -1,14 +1,11 @@
 import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-// import * as L from 'leaflet';
-import { latLng, tileLayer, Icon, icon, Marker } from "leaflet";
+import { HttpClient } from '@angular/common/http';
 import 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
 import 'leaflet-routing-machine';
 declare let L;
 
-// import { MapService } from './map.service';
 
 @Component({
   selector: 'app-wrapper',
@@ -26,58 +23,55 @@ export class MapComponent implements OnInit, AfterViewInit {
   private osm = new L.TileLayer(this.osmUrl, {
     attribution: this.osmAttrib,
     subdomains: this.osmSub
-  })
+  });
   private initialState = {
     lng: 2.3488,
     lat: 48.8534,
     zoom: 15,
     watch: true,
     drawControl: true
-  }
+  };
 
   // Declare variables related to markers on map
   private locationMarker = L.icon({
     iconUrl: '../../assets/img/marker-icon.png',
     iconSize: [38, 41]
-  })
+  });
 
   private userMarker = L.icon({
     iconUrl: '../../assets/img/user-marker.png',
     iconSize: [38, 41]
-  })
+  });
 
-  private markerGroup = L.featureGroup()
+  private markerGroup = L.featureGroup();
 
   // Declare variables related to map container
   @ViewChild('map')
   private mapContainer: ElementRef < HTMLElement >
-
-  // Declare variable related to locations API stored in database
-  // private addressesUrl = 'http://localhost:3000/api/address/getall';
 
   // Declare variable related to displayed markers on map view
   private markersGeo = 'http://localhost:3000/api/address/geo';
 
   address: any;
   addressesArray = [];
+
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.getUserLocation()
+    this.getUserLocation();
   }
 
   ngAfterViewInit() {
-    this.displayMap()
-    this.getMapBounds()
-    // this.drawPath()
+    this.displayMap();
+    this.getMapBounds();
   }
 
-  // Display map function
+  // Display map
   displayMap() {
     this.map = new L.Map(this.mapContainer.nativeElement).addLayer(this.osm).setView(
       [this.initialState.lat, this.initialState.lng],
       this.initialState.zoom,
-    )
+    );
   }
 
   // Get user's geolocation
@@ -89,19 +83,17 @@ export class MapComponent implements OnInit, AfterViewInit {
         L.marker([lat, lng], {
           icon: this.userMarker
         }).bindPopup('Votre position actuelle').addTo(this.markerGroup).openPopup();
-        this.markerGroup.addTo(this.map)
-      })
+        this.markerGroup.addTo(this.map);
+      });
     } else {
-      console.log('User\'s location not found')
+      console.log('User\'s location not found');
     }
   }
 
   // Get displayed map area on device
   getMapBounds() {
     this.map.on('dragend', () => {
-      let width = this.map.getBounds().getEast() - this.map.getBounds().getWest()
-      let height = this.map.getBounds().getNorth() - this.map.getBounds().getSouth()
-      let mapBounds = this.map.getBounds()
+      let mapBounds = this.map.getBounds();
       const polygon = [
         [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ],
         [ mapBounds["_southWest"].lng, mapBounds["_northEast"].lat ],
@@ -109,36 +101,26 @@ export class MapComponent implements OnInit, AfterViewInit {
         [ mapBounds["_northEast"].lng, mapBounds["_southWest"].lat ],
         [ mapBounds["_northEast"].lng, mapBounds["_northEast"].lat ]
       ]
-      this.displayMarkerGeo(polygon)
-    })
+      this.displayMarkerGeo(polygon);
+    });
   }
 
   // Display markers only in map view
   displayMarkerGeo(polygon) {
     this.http.post(this.markersGeo, {polygon: polygon})
     .subscribe(locations => {
-      this.address = locations
+      this.address = locations;
       for (let item in locations) {
-        const coordinates = locations[item].location.coordinates
+        const coordinates = locations[item].location.coordinates;
         if (locations[item].name && locations[item].label) {
-          const locationName = locations[item].name
-          const locationAddress = locations[item].label
+          const locationName = locations[item].name;
+          const locationAddress = locations[item].label;
           L.marker([coordinates[1], coordinates[0]], {
             icon: this.locationMarker
-          }).bindPopup(locationName + '<br><br>' + locationAddress).addTo(this.markerGroup).openPopup()
-          this.markerGroup.addTo(this.map)
+          }).bindPopup(locationName + '<br><br>' + locationAddress).addTo(this.markerGroup).openPopup();
+          this.markerGroup.addTo(this.map);
         }
       }
-    })
+    });
   }
-
-  // drawPath() {
-  //   L.Routing.control({
-  //     waypoints: [
-  //       L.latLng(48.8514206, 2.3820639999999997),
-  //       L.latLng(48.86744600000000105, 2.3762449999999999406)
-  //     ],
-  //     routeWhileDragging: true
-  //   }).addTo(this.map);
-  // }
 }

@@ -4,12 +4,11 @@ import { Router, NavigationStart } from '@angular/router';
 import { mimeType } from './mime-type.validator'
 import { ActivatedRoute } from "@angular/router";
 import { HttpClient } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 import { AuthService } from '../auth.service'
 import { AccountService } from '../../account/account.service';
 import { ProfileService } from '../../auth/profile/profile.service';
-import { Subscription } from 'rxjs';
-import { AuthData } from '../auth-data.model';
 
 @Component({
   selector: 'app-profile',
@@ -36,29 +35,32 @@ export class ProfileComponent {
     private profileService: ProfileService,
     private http: HttpClient
     ) {
+
     // Show / Hide profile on click
     this.accountService.getMessage().subscribe(message => {
-      this.showProfile = true
-    })
+      this.showProfile = true;
+    });
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {
-          this.showProfile = false
+          this.showProfile = false;
         }
       }
-    })
+    });
   }
 
   ngOnInit() {
-    this.userId = this.authService.getUserId()
-    this.userIsAuthenticated = this.authService.getIsAuth()
+    // Get current user's id
+    this.userId = this.authService.getUserId();
+    this.userIsAuthenticated = this.authService.getIsAuth();
     this.authStatusSub = this.authService
     .getAuthStatusListener()
     .subscribe(isAuthenticated => {
-      this.userIsAuthenticated = isAuthenticated
-      this.userId = this.authService.getUserId()
-    })
+      this.userIsAuthenticated = isAuthenticated;
+      this.userId = this.authService.getUserId();
+    });
 
+    // Profile form
     this.form = new FormGroup({
       image: new FormControl(null, {
         validators: [Validators.required],
@@ -73,26 +75,27 @@ export class ProfileComponent {
       password: new FormControl(null, {
         validators: [Validators.required]
       })
-    })
+    });
 
-    this.fetchCurrentUser(this.userId)
+    // Fetch current user's id
+    this.fetchCurrentUser(this.userId);
   }
 
   // Image uploader
   onImagePicked(event: Event) {
-    const file = (event.target as HTMLInputElement).files[0]
-    this.form.patchValue({image: file})
-    this.form.get('image').updateValueAndValidity()
-    const reader = new FileReader()
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file});
+    this.form.get('image').updateValueAndValidity();
+    const reader = new FileReader();
     reader.onload = () => {
-      this.imagePreview = reader.result
+      this.imagePreview = reader.result;
     }
-    reader.readAsDataURL(file)
+    reader.readAsDataURL(file);
   }
 
   // Back to account on click
   returnToAccount() {
-    this.showProfile = false
+    this.showProfile = false;
   }
 
   // Fetch current user's informations
@@ -100,37 +103,34 @@ export class ProfileComponent {
     if (this.userId) {
       this.authService.getCurrentUser(this.userId)
       .subscribe(response => {
-        this.users = response
-        this.users = []
-        this.users.push(response)
-      })
+        this.users = response;
+        this.users = [];
+        this.users.push(response);
+      });
     }
   }
 
   // Show and edit elements on edit button click
   editInfosBtn() {
-    this.isShow = !this.isShow
-    this.isHidden = !this.isHidden
+    this.isShow = !this.isShow;
+    this.isHidden = !this.isHidden;
   }
 
   // Save user's infos on save button click
   saveInfos() {
-    this.authService.updateUserInfos(this.userId, this.form.value.lastname, this.form.value.firstname, this.form.value.password)
-    this.isShow = !this.isShow
-    this.isHidden = !this.isHidden
+    this.authService.updateUserInfos(this.userId, this.form.value.lastname, this.form.value.firstname, this.form.value.password);
+    this.isShow = !this.isShow;
+    this.isHidden = !this.isHidden;
   }
 
   // Delete user's account
   deleteUserAccount() {
-    this.authService.deleteUser(this.userId)
-    this.authService.logout()
+    this.authService.deleteUser(this.userId);
+    this.authService.logout();
   }
 
+  // Show merchant on click
   showMerchant(): void {
-    this.profileService.showMerchant()
+    this.profileService.showMerchant();
   }
-
-  // hideAccount(): void {
-  //   this.navigationService.hideAccount()
-  // }
 }

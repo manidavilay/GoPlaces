@@ -10,7 +10,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 // Import components
 import { AppComponent } from './app.component';
@@ -26,10 +25,8 @@ import { RewardsComponent } from './rewards/rewards.component';
 
 // Import interceptors
 import { AuthInterceptor } from './auth/auth-interceptor';
-// import { MapInterceptor } from './map/map-interceptor';
 
 // Import services
-// import { MapService } from './map/map.service';
 import { NavigationService } from './navigation/navigation.service';
 import { AccountService } from './account/account.service';
 import { ProfileService } from './auth/profile/profile.service';
@@ -63,14 +60,13 @@ import { MerchantService } from './merchant/merchant.service';
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    // MapService,
     NavigationService,
     AccountService,
     ProfileService,
     MerchantService
-    // { provide: HTTP_INTERCEPTORS, useClass: MapInterceptor, multi: true}
   ],
 
   bootstrap: [AppComponent]
 })
+
 export class AppModule { }

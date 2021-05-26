@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 
 import { NavigationService } from '../navigation/navigation.service';
@@ -11,23 +11,26 @@ import { NavigationService } from '../navigation/navigation.service';
 export class NavigationComponent {
   public showNav: boolean = false;
 
+  // Show nav only when connected
   constructor(private router: Router, private navigationService: NavigationService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {
-          this.showNav = false
+          this.showNav = false;
         } else {
-          this.showNav = true
+          this.showNav = true;
         }
       }
-    })
+    });
   }
 
+  // Show account on click
   showAccount(): void {
-    this.navigationService.showAccount()
+    this.navigationService.showAccount();
   }
 
+  // Hide account on click
   hideAccount(): void {
-    this.navigationService.hideAccount()
+    this.navigationService.hideAccount();
   }
 }

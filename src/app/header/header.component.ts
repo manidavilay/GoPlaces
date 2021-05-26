@@ -12,20 +12,22 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent {
   public showHeader: boolean = false;
 
+  // Show header only when connected
   constructor(private router: Router, private authService: AuthService) {
     router.events.forEach((event) => {
       if (event instanceof NavigationStart) {
         if (event['url'] !== '/map') {
-          this.showHeader = false
+          this.showHeader = false;
         } else {
-          this.showHeader = true
+          this.showHeader = true;
         }
       }
-    })
+    });
   }
 
+  // Logout
   onLogout() {
-    this.showHeader = false
-    this.authService.logout()
+    this.showHeader = false;
+    this.authService.logout();
   }
 }

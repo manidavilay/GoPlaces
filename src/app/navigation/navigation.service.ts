@@ -5,15 +5,17 @@ import { Observable, Subject } from 'rxjs';
 export class NavigationService {
   private subject = new Subject<any>();
 
+  // Show account on click
   showAccount() {
-    this.subject.next()
+    this.subject.next();
   }
 
+  // Hide account on click
   hideAccount() {
-    this.subject.next()
+    this.subject.next();
   }
 
   getMessage(): Observable<any> {
-      return this.subject.asObservable();
+    return this.subject.asObservable();
   }
 }

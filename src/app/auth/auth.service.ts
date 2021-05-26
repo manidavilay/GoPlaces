@@ -1,8 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { ProfileComponent } from './profile/profile.component';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { AuthData } from './auth-data.model';
 
@@ -19,18 +18,22 @@ export class AuthService {
     private router: Router
   ) {}
 
+  // Get token
   getToken() {
     return this.token;
   }
 
+  // Get auth
   getIsAuth() {
     return this.isAuthenticated;
   }
 
+  // Get current user's id
   getUserId() {
     return this.userId;
   }
 
+  // Get auth status
   getAuthStatusListener() {
     return this.authStatusListener.asObservable();
   }
@@ -40,11 +43,10 @@ export class AuthService {
     const authData: AuthData = {lastname, firstname, email, password};
     this.http.post('http://localhost:3000/api/user/signup', authData)
     .subscribe(response => {
-      console.log(response)
       if (response) {
-        this.router.navigate(['/'])
+        this.router.navigate(['/']);
       }
-    })
+    });
   }
 
   // Login
@@ -65,7 +67,6 @@ export class AuthService {
         console.log(expirationDate);
         this.saveAuthData(token, expirationDate, this.userId);
         this.router.navigate(['/map']);
-        console.log(response);
       }
     });
   }
@@ -100,7 +101,7 @@ export class AuthService {
 
   // Get current user's id
   getCurrentUser(userId): Observable<any> {
-    return this.http.get('http://localhost:3000/api/user/' + userId)
+    return this.http.get('http://localhost:3000/api/user/' + userId);
   }
 
   // Update user's infos
@@ -111,38 +112,37 @@ export class AuthService {
       password: password
     }
     this.http.put<any>('http://localhost:3000/api/user/' + userId, body)
-    .subscribe(data => {
-      console.log(data)
-    })
+    .subscribe(data => {});
   }
 
   // Delete user
   deleteUser(userId) {
     this.http.delete<any>('http://localhost:3000/api/user/' + userId)
-    .subscribe(data => {
-      console.log(data)
-    })
+    .subscribe(data => {});
   }
 
+  // Set auth timer
   private setAuthTimer(duration: number) {
-    console.log('Setting timer: ' + duration);
     this.tokenTimer = setTimeout(() => {
       this.logout();
     }, duration * 1000);
   }
 
+  // Save auth data to local storage
   private saveAuthData(token: string, expirationDate: Date, userId: string) {
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expirationDate.toISOString());
     localStorage.setItem('userId', userId);
   }
 
+  // Clear auth data from local storage
   private clearAuthData() {
     localStorage.removeItem('token');
     localStorage.removeItem('expiration');
     localStorage.removeItem('userId');
   }
 
+  // Get auth data from local storage
   private getAuthData() {
     const token = localStorage.getItem('token');
     const expirationDate = localStorage.getItem('expiration');
@@ -156,8 +156,5 @@ export class AuthService {
       userId: userId
     }
   }
-}
-function retry(arg0: number): import("rxjs").OperatorFunction<ArrayBuffer, unknown> {
-  throw new Error("Function not implemented.");
 }
 
