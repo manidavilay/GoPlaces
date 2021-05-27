@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { mimeType } from './mime-type.validator';
+import { Router, NavigationStart } from '@angular/router';
 
 import { ProfileService } from '../auth/profile/profile.service';
 import { MerchantService } from './merchant.service';
@@ -20,9 +21,20 @@ export class MerchantComponent {
   addresses: any = [];
 
   // Show / hide merchant on click
-  constructor(public profileService: ProfileService, public merchantService: MerchantService) {
+  constructor(
+    private router: Router,
+    public profileService: ProfileService,
+    public merchantService: MerchantService
+    ) {
     this.profileService.getMessage().subscribe(message => {
       this.showMerchant = true;
+    });
+    router.events.forEach((event) => {
+      if (event instanceof NavigationStart) {
+        if (event['url'] !== '/map') {
+          this.showMerchant = false;
+        }
+      }
     });
   }
 
